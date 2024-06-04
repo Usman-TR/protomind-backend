@@ -110,6 +110,11 @@ return [
 
     'faker_locale' => 'en_US',
 
+
+    'client_reset_password_url' => env('CLIENT_RESET_PASSWORD_URL', 'https://'.env('APP_URL').'/reset-password'),
+
+    'client_create_password_url' => env('CLIENT_CREATE_PASSWORD_URL', 'https://'.env('APP_URL').'/create-password'),
+
     /*
     |--------------------------------------------------------------------------
     | Encryption Key
