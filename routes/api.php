@@ -2,6 +2,10 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\ProtocolController;
+use App\Http\Controllers\ProtocolKeywordController;
+use App\Http\Controllers\ProtocolMemberController;
+use App\Http\Controllers\ProtocolTaskController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,8 +32,17 @@ Route::controller(AuthController::class)->group(function () {
 });
 
 Route::group(["middleware" => "auth:api"], function() {
-    Route::get('users', [UserController::class, 'index']);
-    Route::get('users/{id}', [UserController::class, 'show']);
-    Route::post('users', [UserController::class, 'store']);
-    Route::put('users/{id}', [UserController::class, 'update']);
+    Route::apiResource('users', UserController::class)->except('destroy');
+
+    Route::apiResource('protocols', ProtocolController::class)->except('destroy', 'update');
+    Route::apiResource('protocols/{id}/members', ProtocolMemberController::class)->except('destroy', 'update');
+    Route::delete('protocols/members/{id}', [ProtocolMemberController::class, 'destroy']);
+
+    Route::post('protocols/{id}/tasks', [ProtocolTaskController::class, 'store']);
+    Route::put('protocols/tasks/{id}', [ProtocolTaskController::class, 'update']);
+
+    Route::get('protocols/{id}/keywords', [ProtocolKeywordController::class, 'index']);
+    Route::put('protocols/{id}/keywords', [ProtocolKeywordController::class, 'update']);
+    Route::post('protocols/{id}/keywords', [ProtocolKeywordController::class, 'store']);
+    Route::delete('protocols/keywords/{id}', [ProtocolKeywordController::class, 'destroy']);
 });
