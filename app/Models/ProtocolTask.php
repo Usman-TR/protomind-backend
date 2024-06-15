@@ -7,6 +7,58 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @OA\Schema(
+ *     schema="ProtocolTask",
+ *     type="object",
+ *     title="Задача протокола",
+ *     description="Модель задачи протокола",
+ *     @OA\Property(
+ *         property="id",
+ *         type="integer",
+ *         description="ID задачи протокола"
+ *     ),
+ *     @OA\Property(
+ *         property="protocol_id",
+ *         type="integer",
+ *         description="ID протокола"
+ *     ),
+ *     @OA\Property(
+ *         property="responsible_id",
+ *         type="integer",
+ *         description="ID ответственного пользователя"
+ *     ),
+ *     @OA\Property(
+ *         property="essence",
+ *         type="string",
+ *         description="Суть задачи",
+ *         maxLength=65000
+ *     ),
+ *     @OA\Property(
+ *         property="deadline",
+ *         type="string",
+ *         format="date",
+ *         description="Срок выполнения задачи"
+ *     ),
+ *     @OA\Property(
+ *         property="status",
+ *         type="string",
+ *         description="Статус задачи"
+ *     ),
+ *     @OA\Property(
+ *         property="created_at",
+ *         type="string",
+ *         format="date-time",
+ *         description="Дата и время создания задачи"
+ *     ),
+ *     @OA\Property(
+ *         property="updated_at",
+ *         type="string",
+ *         format="date-time",
+ *         description="Дата и время последнего обновления задачи"
+ *     )
+ * )
+ */
 class ProtocolTask extends Model
 {
     use HasFactory;

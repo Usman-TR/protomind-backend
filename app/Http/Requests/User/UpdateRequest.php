@@ -4,6 +4,51 @@ namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+
+/**
+ * @OA\Schema(
+ *     schema="UserUpdateRequest",
+ *     type="object",
+ *     title="Запрос на обновление пользователя",
+ *     description="Запрос, содержащий данные для обновления пользователя",
+ *     @OA\Property(
+ *         property="full_name",
+ *         type="string",
+ *         description="Полное имя пользователя",
+ *         maxLength=255,
+ *         nullable=true
+ *     ),
+ *     @OA\Property(
+ *         property="email",
+ *         type="string",
+ *         format="email",
+ *         description="Электронная почта пользователя",
+ *         maxLength=255,
+ *         nullable=true
+ *     ),
+ *     @OA\Property(
+ *         property="login",
+ *         type="string",
+ *         description="Логин пользователя",
+ *         maxLength=255,
+ *         nullable=true
+ *     ),
+ *     @OA\Property(
+ *         property="department",
+ *         type="string",
+ *         description="Отдел пользователя",
+ *         maxLength=255,
+ *         nullable=true
+ *     ),
+ *     @OA\Property(
+ *         property="is_active",
+ *         type="boolean",
+ *         description="Статус активности пользователя",
+ *         nullable=true
+ *     )
+ * )
+ */
+
 class UpdateRequest extends FormRequest
 {
     /**

@@ -4,6 +4,58 @@ namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+
+/**
+ * @OA\Schema(
+ *     schema="UserStoreRequest",
+ *     type="object",
+ *     title="Запрос на создание пользователя",
+ *     description="Запрос, содержащий данные для создания пользователя",
+ *     @OA\Property(
+ *         property="full_name",
+ *         type="string",
+ *         description="Полное имя пользователя",
+ *         maxLength=255,
+ *         nullable=true
+ *     ),
+ *     @OA\Property(
+ *         property="email",
+ *         type="string",
+ *         format="email",
+ *         description="Электронная почта пользователя",
+ *         maxLength=255,
+ *         nullable=true
+ *     ),
+ *     @OA\Property(
+ *         property="password",
+ *         type="string",
+ *         description="Пароль пользователя",
+ *         minLength=6,
+ *         nullable=true
+ *     ),
+ *     @OA\Property(
+ *         property="login",
+ *         type="string",
+ *         description="Логин пользователя",
+ *         maxLength=255,
+ *         nullable=true
+ *     ),
+ *     @OA\Property(
+ *         property="department",
+ *         type="string",
+ *         description="Отдел пользователя",
+ *         maxLength=255,
+ *         nullable=true
+ *     ),
+ *     @OA\Property(
+ *         property="external",
+ *         type="boolean",
+ *         description="Внешний пользователь",
+ *         nullable=true
+ *     )
+ * )
+ */
+
 class StoreRequest extends FormRequest
 {
     /**
@@ -22,11 +74,12 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'full_name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|min:6',
-            'login' => 'required|max:255,unique:users',
-            'department' => 'required|max:255',
+            'full_name' => ['required_if:external,false', 'nullable', 'max:255'],
+            'email' => ['required_if:external,false', 'nullable', 'email', 'max:255', 'unique:users'],
+            'password' => ['required_if:external,false', 'nullable', 'min:6'],
+            'login' => ['required_if:external,false', 'nullable', 'max:255', 'unique:users'],
+            'department' => ['required_if:external,false', 'nullable', 'max:255'],
+            'external' => ['sometimes', 'boolean'],
         ];
     }
 }

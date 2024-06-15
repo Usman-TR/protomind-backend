@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\KeywordController;
+use App\Http\Controllers\Api\MeetingController;
+use App\Http\Controllers\Api\ProtocolController;
+use App\Http\Controllers\Api\ProtocolDocumentController;
+use App\Http\Controllers\Api\ProtocolMemberController;
+use App\Http\Controllers\Api\ProtocolTaskController;
 use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\ProtocolController;
-use App\Http\Controllers\ProtocolKeywordController;
-use App\Http\Controllers\ProtocolMemberController;
-use App\Http\Controllers\ProtocolTaskController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,15 +36,22 @@ Route::controller(AuthController::class)->group(function () {
 Route::group(["middleware" => "auth:api"], function() {
     Route::apiResource('users', UserController::class)->except('destroy');
 
-    Route::apiResource('protocols', ProtocolController::class)->except('destroy', 'update');
+    Route::apiResource('protocols', ProtocolController::class);
     Route::apiResource('protocols/{id}/members', ProtocolMemberController::class)->except('destroy', 'update');
     Route::delete('protocols/members/{id}', [ProtocolMemberController::class, 'destroy']);
 
     Route::post('protocols/{id}/tasks', [ProtocolTaskController::class, 'store']);
     Route::put('protocols/tasks/{id}', [ProtocolTaskController::class, 'update']);
 
-    Route::get('protocols/{id}/keywords', [ProtocolKeywordController::class, 'index']);
-    Route::put('protocols/{id}/keywords', [ProtocolKeywordController::class, 'update']);
-    Route::post('protocols/{id}/keywords', [ProtocolKeywordController::class, 'store']);
-    Route::delete('protocols/keywords/{id}', [ProtocolKeywordController::class, 'destroy']);
+    Route::get('protocols/{id}/documents/docx', [ProtocolDocumentController::class, 'generateDocx']);
+    Route::get('protocols/{id}/documents/pdf', [ProtocolDocumentController::class, 'generatePdf']);
+
+    Route::prefix('keywords')->controller(KeywordController::class)->group(function () {
+        Route::get('/', 'index');
+        Route::post('/', 'store');
+        Route::put('/', 'update');
+        Route::delete('/{id}', 'destroy');
+    });
+
+    Route::apiResource('meetings', MeetingController::class);
 });

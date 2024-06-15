@@ -7,10 +7,69 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Protocol extends Model
+/**
+ * @OA\Schema(
+ *     schema="Protocol",
+ *     type="object",
+ *     title="Протокол",
+ *     description="Модель протокола",
+ *     @OA\Property(
+ *         property="id",
+ *         type="integer",
+ *         description="ID протокола"
+ *     ),
+ *     @OA\Property(
+ *         property="theme",
+ *         type="string",
+ *         description="Тема протокола"
+ *     ),
+ *     @OA\Property(
+ *         property="agenda",
+ *         type="string",
+ *         description="Повестка дня"
+ *     ),
+ *     @OA\Property(
+ *         property="secretary_id",
+ *         type="integer",
+ *         description="ID секретаря"
+ *     ),
+ *     @OA\Property(
+ *         property="director_id",
+ *         type="integer",
+ *         description="ID директора"
+ *     ),
+ *     @OA\Property(
+ *         property="event_date",
+ *         type="string",
+ *         format="date",
+ *         description="Дата события"
+ *     ),
+ *     @OA\Property(
+ *         property="status",
+ *         type="string",
+ *         description="Статус протокола"
+ *     ),
+ *     @OA\Property(
+ *         property="created_at",
+ *         type="string",
+ *         format="date-time",
+ *         description="Дата и время создания протокола"
+ *     ),
+ *     @OA\Property(
+ *         property="updated_at",
+ *         type="string",
+ *         format="date-time",
+ *         description="Дата и время последнего обновления протокола"
+ *     )
+ * )
+ */
+
+class Protocol extends Model implements HasMedia
 {
-    use HasFactory;
+    use HasFactory, InteractsWithMedia;
 
     protected $fillable = [
         'theme',
@@ -19,6 +78,9 @@ class Protocol extends Model
         'secretary_id',
         'director_id',
         'status',
+        'stage',
+        'transcript',
+        'final_transcript',
     ];
 
     protected $casts = [
@@ -33,11 +95,6 @@ class Protocol extends Model
     public function tasks(): HasMany
     {
         return $this->hasMany(ProtocolTask::class);
-    }
-
-    public function keywords(): HasMany
-    {
-        return $this->hasMany(ProtocolKeyword::class);
     }
 
     public function secretary(): BelongsTo

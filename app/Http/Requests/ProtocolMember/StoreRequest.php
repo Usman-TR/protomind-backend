@@ -4,6 +4,20 @@ namespace App\Http\Requests\ProtocolMember;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+
+/**
+ * @OA\Schema(
+ *     schema="ProtocolMemberStoreRequest",
+ *     type="object",
+ *     title="Запрос на добавление участника протокола",
+ *     description="Запрос, содержащий данные для добавления участника протокола",
+ *     @OA\Property(
+ *         property="member_id",
+ *         type="integer",
+ *         description="ID участника (пользователя)"
+ *     )
+ * )
+ */
 class StoreRequest extends FormRequest
 {
     /**

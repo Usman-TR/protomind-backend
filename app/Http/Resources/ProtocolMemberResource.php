@@ -5,6 +5,27 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @OA\Schema(
+ *     schema="ProtocolMemberResource",
+ *     type="object",
+ *     title="Участник протокола",
+ *     description="Ресурс участника протокола",
+ *     @OA\Property(
+ *         property="id",
+ *         type="integer",
+ *         description="ID участника протокола"
+ *     ),
+ *     @OA\Property(
+ *         property="protocol",
+ *         ref="#/components/schemas/ProtocolResource"
+ *     ),
+ *     @OA\Property(
+ *         property="member",
+ *         ref="#/components/schemas/UserResource"
+ *     )
+ * )
+ */
 class ProtocolMemberResource extends JsonResource
 {
     /**

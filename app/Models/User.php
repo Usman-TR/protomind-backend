@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Http\Filters\Traits\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -12,12 +13,71 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
+
+/**
+ * @OA\Schema(
+ *     schema="User",
+ *     type="object",
+ *     title="Пользователь",
+ *     description="Модель пользователя",
+ *     @OA\Property(
+ *         property="id",
+ *         type="integer",
+ *         description="ID пользователя"
+ *     ),
+ *     @OA\Property(
+ *         property="full_name",
+ *         type="string",
+ *         description="Полное имя пользователя"
+ *     ),
+ *     @OA\Property(
+ *         property="email",
+ *         type="string",
+ *         format="email",
+ *         description="Электронная почта пользователя"
+ *     ),
+ *     @OA\Property(
+ *         property="password",
+ *         type="string",
+ *         description="Пароль пользователя"
+ *     ),
+ *     @OA\Property(
+ *         property="login",
+ *         type="string",
+ *         description="Логин пользователя"
+ *     ),
+ *     @OA\Property(
+ *         property="department",
+ *         type="string",
+ *         description="Отдел пользователя"
+ *     ),
+ *     @OA\Property(
+ *         property="is_active",
+ *         type="boolean",
+ *         description="Статус активности пользователя"
+ *     ),
+ *     @OA\Property(
+ *         property="created_at",
+ *         type="string",
+ *         format="date-time",
+ *         description="Дата и время создания пользователя"
+ *     ),
+ *     @OA\Property(
+ *         property="updated_at",
+ *         type="string",
+ *         format="date-time",
+ *         description="Дата и время последнего обновления пользователя"
+ *     )
+ * )
+ */
+
 class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens,
         HasFactory,
         Notifiable,
-        HasRoles;
+        HasRoles,
+        Filterable;
 
     protected string $guard_name = 'api';
 
@@ -74,9 +134,18 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo(User::class, 'manager_id');
     }
 
-    // Отношение к секретарям
     public function secretaries(): HasMany
     {
         return $this->hasMany(User::class, 'manager_id');
+    }
+
+    public function meetings(): HasMany
+    {
+        return $this->hasMany(Meeting::class, 'secretary_id');
+    }
+
+    public function protocols(): HasMany
+    {
+        return $this->hasMany(Protocol::class, 'secretary_id');
     }
 }

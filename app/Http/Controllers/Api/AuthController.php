@@ -16,6 +16,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 
+
 class AuthController extends Controller
 {
 
@@ -122,14 +123,20 @@ class AuthController extends Controller
      *     @OA\Response(response="200",
      *          description="OK",
      *          @OA\MediaType(
-     *              mediaType="application/json",
-     *              @OA\Schema(
-     *                 @OA\Property(
-     *                     property="user",
-     *                     ref="#/components/schemas/User"
-     *                 ),
-     *              )
-     *          )
+     *               mediaType="application/json",
+     *               @OA\Schema(
+     *                  @OA\Property(
+     *                      property="token",
+     *                      type="string",
+     *                              example="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9yJpc3MiOiJodHRwOi8vbG9jYWxob3N0L2FwaS9sb2dpbiIsImlhdCI6MTcwNjUxMDU4MCwiZXhwIjoxNzA2NTE0MTgwLCJuYmYiOjE3MDY1MTA1ODAsImp0aSI6IlpHb3ZxekZLd3ppa3VoVjciLCJzdWIiOiIyIiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.YJ3frVsQSqnOg6fIZ7nwwE6AogmXfwEA-me-g9wDvBg"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="expires_in",
+     *                      type="int64",
+     *                      example=3600
+     *                  )
+     *               )
+     *           )
      *      ),
      *      @OA\Response(
      *          response="401",

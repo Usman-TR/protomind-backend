@@ -4,6 +4,33 @@ namespace App\Http\Requests\ProtocolTask;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+
+/**
+ * @OA\Schema(
+ *     schema="ProtocolTaskStoreRequest",
+ *     type="object",
+ *     title="Запрос на создание задачи протокола",
+ *     description="Запрос, содержащий данные для создания задачи протокола",
+ *     @OA\Property(
+ *         property="responsible_id",
+ *         type="integer",
+ *         description="ID ответственного пользователя"
+ *     ),
+ *     @OA\Property(
+ *         property="essence",
+ *         type="string",
+ *         description="Суть задачи",
+ *         maxLength=65000
+ *     ),
+ *     @OA\Property(
+ *         property="deadline",
+ *         type="string",
+ *         format="date",
+ *         description="Срок выполнения задачи",
+ *         example="2023-06-01"
+ *     )
+ * )
+ */
 class StoreRequest extends FormRequest
 {
     /**

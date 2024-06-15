@@ -2,20 +2,20 @@
 
 namespace App\Services;
 
+use App\Models\Keyword;
 use App\Models\ProtocolKeyword;
 use Illuminate\Support\Collection;
 
 
-class ProtocolKeywordService
+class KeywordService
 {
-    public function create(array $data, int $protocolId): Collection
+    public function create(array $data): Collection
     {
         $currentTime = now();
         $newKeywords = [];
 
         foreach ($data['keywords'] as $keyword) {
             $newKeywords[] = [
-                'protocol_id' => $protocolId,
                 'title' => $keyword['title'],
                 'phrase' => $keyword['phrase'],
                 'created_at' => $currentTime,
@@ -23,11 +23,9 @@ class ProtocolKeywordService
             ];
         }
 
-        ProtocolKeyword::insert($newKeywords);
+        Keyword::insert($newKeywords);
 
-        return ProtocolKeyword::where('created_at', $currentTime)
-            ->orWhere('updated_at', $currentTime)
-            ->get();
+        return Keyword::where('created_at', $currentTime)->get();
 
     }
 
@@ -37,7 +35,7 @@ class ProtocolKeywordService
 
         $idsToUpdate = collect($data['keywords'])->pluck('id')->filter();
 
-        $protocolKeywords = ProtocolKeyword::whereIn('id', $idsToUpdate)->get()->keyBy('id');
+        $protocolKeywords = Keyword::whereIn('id', $idsToUpdate)->get()->keyBy('id');
 
         foreach ($data['keywords'] as $keyword) {
             if (isset($keyword['id']) && isset($protocolKeywords[$keyword['id']])) {
@@ -49,6 +47,6 @@ class ProtocolKeywordService
             }
         }
 
-        return ProtocolKeyword::orWhere('updated_at', $currentTime)->get();
+        return Keyword::orWhere('updated_at', $currentTime)->get();
     }
 }

@@ -4,6 +4,51 @@ namespace App\Http\Requests\Protocol;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+
+/**
+ * @OA\Schema(
+ *     schema="ProtocolStoreRequest",
+ *     type="object",
+ *     title="Запрос на создание протокола",
+ *     description="Запрос, содержащий данные для создания протокола",
+ *     @OA\Property(
+ *         property="theme",
+ *         type="string",
+ *         description="Тема протокола",
+ *         maxLength=255
+ *     ),
+ *     @OA\Property(
+ *         property="agenda",
+ *         type="string",
+ *         description="Повестка дня",
+ *         maxLength=255
+ *     ),
+ *     @OA\Property(
+ *         property="secretary_id",
+ *         type="integer",
+ *         description="ID секретаря"
+ *     ),
+ *     @OA\Property(
+ *         property="director_id",
+ *         type="integer",
+ *         description="ID директора"
+ *     ),
+ *     @OA\Property(
+ *         property="event_date",
+ *         type="string",
+ *         format="date",
+ *         description="Дата события",
+ *         example="2023-06-01"
+ *     ),
+ *     @OA\Property(
+ *         property="video",
+ *         type="string",
+ *         format="binary",
+ *         description="Видео файл",
+ *         example="video.mp4"
+ *     )
+ * )
+ */
 class StoreRequest extends FormRequest
 {
     /**
@@ -27,6 +72,7 @@ class StoreRequest extends FormRequest
             'secretary_id' => ['required', 'integer'],
             'director_id' => ['required', 'integer'],
             'event_date' => ['required', 'date_format:Y-m-d'],
+            'video' => ['required', 'file', 'mimes:mp4,avi,mov,wmv,mkv,flv,m4v,webm,ogg'],
         ];
     }
 }

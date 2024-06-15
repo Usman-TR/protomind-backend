@@ -1,0 +1,2315 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Protomind API",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Метод для авторизации пользователя",
+                "description": "Метод для авторизации пользователя",
+                "operationId": "login",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "example@242_test.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "242_test"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "type": "string",
+                                            "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9yJpc3MiOiJodHRwOi8vbG9jYWxob3N0L2FwaS9sb2dpbiIsImlhdCI6MTcwNjUxMDU4MCwiZXhwIjoxNzA2NTE0MTgwLCJuYmYiOjE3MDY1MTA1ODAsImp0aSI6IlpHb3ZxekZLd3ppa3VoVjciLCJzdWIiOiIyIiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.YJ3frVsQSqnOg6fIZ7nwwE6AogmXfwEA-me-g9wDvBg"
+                                        },
+                                        "expires_in": {
+                                            "type": "int64",
+                                            "example": 3600
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Метод для выхода из системы",
+                "description": "Метод для выхода из системы",
+                "operationId": "logout",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/refresh": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Метод для обновления jwt токенов пользователя",
+                "description": "Метод для обновления jwt токенов пользователя",
+                "operationId": "refresh",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "type": "string",
+                                            "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9yJpc3MiOiJodHRwOi8vbG9jYWxob3N0L2FwaS9sb2dpbiIsImlhdCI6MTcwNjUxMDU4MCwiZXhwIjoxNzA2NTE0MTgwLCJuYmYiOjE3MDY1MTA1ODAsImp0aSI6IlpHb3ZxekZLd3ppa3VoVjciLCJzdWIiOiIyIiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.YJ3frVsQSqnOg6fIZ7nwwE6AogmXfwEA-me-g9wDvBg"
+                                        },
+                                        "expires_in": {
+                                            "type": "int64",
+                                            "example": 3600
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/me": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Метод для получения информации о текущем авторизованном пользователе/проверки авторизации",
+                "description": "Метод для получения информации о текущем авторизованном пользователе/проверки авторизации",
+                "operationId": "me",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/change-password/send-link": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Метод для отправки письма со ссылкой на смену пароля",
+                "description": "Метод для отправки письма со ссылкой на смену пароля",
+                "operationId": "sendLinkChangePassword",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "example@242_test.com"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ссылка на смену пароля отправлена на почту"
+                    },
+                    "404": {
+                        "description": "Пользователь с таким email не существует"
+                    }
+                }
+            }
+        },
+        "/api/change-password/change": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Метод для смены пароля",
+                "description": "Метод для смены пароля",
+                "operationId": "changePassword",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "example@242_test.com"
+                                    },
+                                    "code": {
+                                        "type": "string",
+                                        "example": "JIG4uMkrwX5FfcK6vIBFq29wvLojKobszO1QHXcjcMlSVw6HIduGR7mlDMB6nkAB"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "newPassword"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Пароль успешно обновлён!"
+                    },
+                    "404": {
+                        "description": "Пользователь с таким email не существует"
+                    },
+                    "400": {
+                        "description": "Неправильный код подтверждения"
+                    }
+                }
+            }
+        },
+        "/api/keywords": {
+            "get": {
+                "tags": [
+                    "Keywords"
+                ],
+                "summary": "Выводит все ключевые слова, отсортированные по времени",
+                "description": "Метод для отображения списка ключевых слов",
+                "operationId": "indexKeywords",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/KeywordResource"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Keywords"
+                ],
+                "summary": "Создание нового ключевого слова",
+                "description": "Метод для создания нового ключевого слова",
+                "operationId": "storeKeyword",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/KeywordStoreRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Успешная операция",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/KeywordResource"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/keywords/{id}": {
+            "put": {
+                "tags": [
+                    "Keywords"
+                ],
+                "summary": "Обновление существующего ключевого слова",
+                "description": "Метод для обновления существующего ключевого слова",
+                "operationId": "updateKeyword",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/KeywordUpdateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KeywordResource"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Keywords"
+                ],
+                "summary": "Удаление существующего ключевого слова",
+                "description": "Метод для удаления ключевого слова",
+                "operationId": "destroyKeyword",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "success"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Ничего не найдено."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/meetings": {
+            "get": {
+                "tags": [
+                    "Meetings"
+                ],
+                "summary": "Показать список совещаний",
+                "description": "Метод для отображения списка совещаний",
+                "operationId": "indexMeetings",
+                "responses": {
+                    "200": {
+                        "description": "Успешная операция",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/MeetingResource"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Meetings"
+                ],
+                "summary": "Создать новое совещание",
+                "description": "Метод для создания нового совещания",
+                "operationId": "storeMeeting",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MeetingStoreRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Успешная операция",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MeetingResource"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Ошибочный запрос",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Ошибка при создании совещания"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/meetings/{id}": {
+            "get": {
+                "tags": [
+                    "Meetings"
+                ],
+                "summary": "Показать совещание",
+                "description": "Метод для отображения данных совещания",
+                "operationId": "showMeeting",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID совещания",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешная операция",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MeetingResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Не найдено",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Совещание не найдено."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Meetings"
+                ],
+                "summary": "Обновить совещание",
+                "description": "Метод для обновления совещания",
+                "operationId": "updateMeeting",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID совещания",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MeetingUpdateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Успешная операция",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MeetingResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Не найдено",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Совещание не найдено."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Meetings"
+                ],
+                "summary": "Удалить совещание",
+                "description": "Метод для удаления совещания",
+                "operationId": "destroyMeeting",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID совещания",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "success"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Не найдено",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Совещание не найдено."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/protocols": {
+            "get": {
+                "tags": [
+                    "Protocols"
+                ],
+                "summary": "Показать список протоколов",
+                "description": "Метод для отображения списка протоколов",
+                "operationId": "indexProtocols",
+                "responses": {
+                    "200": {
+                        "description": "Успешная операция",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ProtocolResource"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Protocols"
+                ],
+                "summary": "Создать новый протокол",
+                "description": "Метод для создания нового протокола",
+                "operationId": "storeProtocol",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProtocolStoreRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Успешная операция",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProtocolResource"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Ошибочный запрос",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Ошибка при создании протокола"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/protocols/{id}": {
+            "get": {
+                "tags": [
+                    "Protocols"
+                ],
+                "summary": "Показать протокол",
+                "description": "Метод для отображения данных протокола",
+                "operationId": "showProtocol",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID протокола",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешная операция",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProtocolResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Не найдено",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Протокол не найден."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Protocols"
+                ],
+                "summary": "Обновить протокол",
+                "description": "Метод для обновления данных протокола",
+                "operationId": "updateProtocol",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID протокола",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProtocolUpdateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Успешная операция",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProtocolResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Не найдено",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Протокол не найден."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Protocols"
+                ],
+                "summary": "Удалить протокол",
+                "description": "Метод для удаления протокола",
+                "operationId": "destroyProtocol",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID протокола",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "success"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Не найдено",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Протокол не найден."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/protocols/{id}/documents/pdf": {
+            "get": {
+                "tags": [
+                    "ProtocolDocuments"
+                ],
+                "summary": "Сгенерировать PDF протокола",
+                "description": "Метод для генерации PDF версии протокола",
+                "operationId": "generatePdf",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID протокола",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешная операция",
+                        "content": {
+                            "application/pdf": {
+                                "schema": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Протокол не найден",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Протокол не найден."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/protocols/{id}/documents/docx": {
+            "get": {
+                "tags": [
+                    "ProtocolDocuments"
+                ],
+                "summary": "Сгенерировать DOCX протокола",
+                "description": "Метод для генерации DOCX версии протокола",
+                "operationId": "generateDocx",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID протокола",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешная операция",
+                        "content": {
+                            "application/vnd.openxmlformats-officedocument.wordprocessingml.document": {
+                                "schema": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Протокол не найден",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Протокол не найден."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/protocols/{protocolId}/members": {
+            "get": {
+                "tags": [
+                    "ProtocolMembers"
+                ],
+                "summary": "Показать участников протокола",
+                "description": "Метод для отображения списка участников протокола",
+                "operationId": "indexProtocolMembers",
+                "parameters": [
+                    {
+                        "name": "protocolId",
+                        "in": "path",
+                        "description": "ID протокола",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешная операция",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ProtocolMemberResource"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Протокол не найден",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Протокол не найден."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "ProtocolMembers"
+                ],
+                "summary": "Добавить участника в протокол",
+                "description": "Метод для добавления нового участника в протокол",
+                "operationId": "storeProtocolMember",
+                "parameters": [
+                    {
+                        "name": "protocolId",
+                        "in": "path",
+                        "description": "ID протокола",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProtocolMemberStoreRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Успешная операция",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProtocolMemberResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Протокол не найден",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Протокол не найден."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/protocols/members/{id}": {
+            "delete": {
+                "tags": [
+                    "ProtocolMembers"
+                ],
+                "summary": "Удалить участника протокола",
+                "description": "Метод для удаления участника протокола",
+                "operationId": "destroyProtocolMember",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID участника протокола",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешная операция",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Участник удален."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Не найдено",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Участник протокола не найден."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/protocols/{protocolId}/tasks": {
+            "post": {
+                "tags": [
+                    "ProtocolTasks"
+                ],
+                "summary": "Создать новую задачу в протоколе",
+                "description": "Метод для создания новой задачи в протоколе",
+                "operationId": "storeProtocolTask",
+                "parameters": [
+                    {
+                        "name": "protocolId",
+                        "in": "path",
+                        "description": "ID протокола",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProtocolTaskStoreRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Успешная операция",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProtocolTaskResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Протокол не найден",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Протокол не найден."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/protocols/{protocolId}/tasks/{taskId}": {
+            "put": {
+                "tags": [
+                    "ProtocolTasks"
+                ],
+                "summary": "Обновить задачу в протоколе",
+                "description": "Метод для обновления задачи в протоколе",
+                "operationId": "updateProtocolTask",
+                "parameters": [
+                    {
+                        "name": "protocolId",
+                        "in": "path",
+                        "description": "ID протокола",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "taskId",
+                        "in": "path",
+                        "description": "ID задачи",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProtocolTaskUpdateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Успешная операция",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProtocolTaskResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Задача не найдена",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Задача не найдена."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Получить список пользователей",
+                "description": "Метод для отображения списка пользователей с фильтрацией",
+                "operationId": "indexUsers",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Поиск по полному имени",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "login",
+                        "in": "query",
+                        "description": "Поиск по логину",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "Поиск по электронной почте",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешная операция",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/UserResource"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Создать нового пользователя",
+                "description": "Метод для создания нового пользователя",
+                "operationId": "storeUser",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserStoreRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Успешная операция",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserResource"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Ошибочный запрос",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Ошибка при создании пользователя"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/{id}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Получить пользователя",
+                "description": "Метод для отображения данных пользователя",
+                "operationId": "showUser",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID пользователя",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешная операция",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserResource"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Ошибочный запрос",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Пользователь не найден."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Обновить пользователя",
+                "description": "Метод для обновления данных пользователя",
+                "operationId": "updateUser",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID пользователя",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserUpdateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Успешная операция",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserResource"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Ошибочный запрос",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Пользователь не найден."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "KeywordStoreRequest": {
+                "title": "Запрос на создание ключевых слов",
+                "description": "Запрос, содержащий список ключевых слов для создания",
+                "properties": {
+                    "keywords": {
+                        "description": "Список ключевых слов",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "title": {
+                                    "description": "Заголовок ключевого слова",
+                                    "type": "string"
+                                },
+                                "phrase": {
+                                    "description": "Фраза ключевого слова",
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "KeywordUpdateRequest": {
+                "title": "Запрос на обновление ключевых слов",
+                "description": "Запрос, содержащий список ключевых слов для обновления",
+                "properties": {
+                    "keywords": {
+                        "description": "Список ключевых слов",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "id": {
+                                    "description": "ID",
+                                    "type": "integer"
+                                },
+                                "title": {
+                                    "description": "Заголовок ключевого слова",
+                                    "type": "string"
+                                },
+                                "phrase": {
+                                    "description": "Фраза ключевого слова",
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "MeetingStoreRequest": {
+                "title": "Запрос на создание совещания",
+                "description": "Запрос, содержащий данные для создания совещания",
+                "properties": {
+                    "secretary_id": {
+                        "description": "ID секретаря",
+                        "type": "integer"
+                    },
+                    "document": {
+                        "description": "Документ совещания",
+                        "type": "string",
+                        "format": "binary"
+                    },
+                    "theme": {
+                        "description": "Тема совещания",
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "link": {
+                        "description": "Ссылка на совещание",
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "event_date": {
+                        "description": "Дата совещания",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "event_start_time": {
+                        "description": "Время начала совещания",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "event_end_time": {
+                        "description": "Время окончания совещания",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "members": {
+                        "description": "Список участников совещания",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "member_id": {
+                                    "description": "ID участника",
+                                    "type": "integer"
+                                },
+                                "should_notify": {
+                                    "description": "Уведомлять ли участника",
+                                    "type": "boolean"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "MeetingUpdateRequest": {
+                "title": "Запрос на обновление совещания",
+                "description": "Запрос, содержащий данные для обновления совещания",
+                "properties": {
+                    "theme": {
+                        "description": "Тема совещания",
+                        "type": "string",
+                        "maxLength": 255,
+                        "nullable": true
+                    },
+                    "document": {
+                        "description": "Документ совещания",
+                        "type": "string",
+                        "format": "binary",
+                        "nullable": true
+                    },
+                    "link": {
+                        "description": "Ссылка на совещание",
+                        "type": "string",
+                        "maxLength": 255,
+                        "nullable": true
+                    },
+                    "event_date": {
+                        "description": "Дата совещания",
+                        "type": "string",
+                        "format": "date",
+                        "nullable": true
+                    },
+                    "event_start_time": {
+                        "description": "Время начала совещания",
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "event_end_time": {
+                        "description": "Время окончания совещания",
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "members": {
+                        "description": "Список участников совещания",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "member_id": {
+                                    "description": "ID участника",
+                                    "type": "integer"
+                                },
+                                "should_notify": {
+                                    "description": "Уведомлять ли участника",
+                                    "type": "boolean"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "ProtocolMemberStoreRequest": {
+                "title": "Запрос на добавление участника протокола",
+                "description": "Запрос, содержащий данные для добавления участника протокола",
+                "properties": {
+                    "member_id": {
+                        "description": "ID участника (пользователя)",
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "ProtocolTaskStoreRequest": {
+                "title": "Запрос на создание задачи протокола",
+                "description": "Запрос, содержащий данные для создания задачи протокола",
+                "properties": {
+                    "responsible_id": {
+                        "description": "ID ответственного пользователя",
+                        "type": "integer"
+                    },
+                    "essence": {
+                        "description": "Суть задачи",
+                        "type": "string",
+                        "maxLength": 65000
+                    },
+                    "deadline": {
+                        "description": "Срок выполнения задачи",
+                        "type": "string",
+                        "format": "date",
+                        "example": "2023-06-01"
+                    }
+                },
+                "type": "object"
+            },
+            "ProtocolTaskUpdateRequest": {
+                "title": "Запрос на обновление задачи протокола",
+                "description": "Запрос, содержащий данные для обновления задачи протокола",
+                "properties": {
+                    "responsible_id": {
+                        "description": "ID ответственного пользователя",
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "essence": {
+                        "description": "Суть задачи",
+                        "type": "string",
+                        "maxLength": 65000,
+                        "nullable": true
+                    },
+                    "deadline": {
+                        "description": "Срок выполнения задачи",
+                        "type": "string",
+                        "format": "date",
+                        "example": "2023-06-01",
+                        "nullable": true
+                    },
+                    "status": {
+                        "description": "Статус задачи",
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "ProtocolStoreRequest": {
+                "title": "Запрос на создание протокола",
+                "description": "Запрос, содержащий данные для создания протокола",
+                "properties": {
+                    "theme": {
+                        "description": "Тема протокола",
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "agenda": {
+                        "description": "Повестка дня",
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "secretary_id": {
+                        "description": "ID секретаря",
+                        "type": "integer"
+                    },
+                    "director_id": {
+                        "description": "ID директора",
+                        "type": "integer"
+                    },
+                    "event_date": {
+                        "description": "Дата события",
+                        "type": "string",
+                        "format": "date",
+                        "example": "2023-06-01"
+                    },
+                    "video": {
+                        "description": "Видео файл",
+                        "type": "string",
+                        "format": "binary",
+                        "example": "video.mp4"
+                    }
+                },
+                "type": "object"
+            },
+            "ProtocolUpdateRequest": {
+                "title": "Запрос на обновление протокола",
+                "description": "Запрос, содержащий данные для обновления протокола",
+                "properties": {
+                    "theme": {
+                        "description": "Тема протокола",
+                        "type": "string",
+                        "maxLength": 255,
+                        "nullable": true
+                    },
+                    "agenda": {
+                        "description": "Повестка дня",
+                        "type": "string",
+                        "maxLength": 255,
+                        "nullable": true
+                    },
+                    "secretary_id": {
+                        "description": "ID секретаря",
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "director_id": {
+                        "description": "ID директора",
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "event_date": {
+                        "description": "Дата события",
+                        "type": "string",
+                        "format": "date",
+                        "example": "2023-06-01",
+                        "nullable": true
+                    },
+                    "video": {
+                        "description": "Видео файл",
+                        "type": "string",
+                        "format": "binary",
+                        "example": "video.mp4",
+                        "nullable": true
+                    },
+                    "final_transcript": {
+                        "description": "Окончательный протокол",
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "execute": {
+                        "description": "Выполнить",
+                        "type": "boolean",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "UserStoreRequest": {
+                "title": "Запрос на создание пользователя",
+                "description": "Запрос, содержащий данные для создания пользователя",
+                "properties": {
+                    "full_name": {
+                        "description": "Полное имя пользователя",
+                        "type": "string",
+                        "maxLength": 255,
+                        "nullable": true
+                    },
+                    "email": {
+                        "description": "Электронная почта пользователя",
+                        "type": "string",
+                        "format": "email",
+                        "maxLength": 255,
+                        "nullable": true
+                    },
+                    "password": {
+                        "description": "Пароль пользователя",
+                        "type": "string",
+                        "minLength": 6,
+                        "nullable": true
+                    },
+                    "login": {
+                        "description": "Логин пользователя",
+                        "type": "string",
+                        "maxLength": 255,
+                        "nullable": true
+                    },
+                    "department": {
+                        "description": "Отдел пользователя",
+                        "type": "string",
+                        "maxLength": 255,
+                        "nullable": true
+                    },
+                    "external": {
+                        "description": "Внешний пользователь",
+                        "type": "boolean",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "UserUpdateRequest": {
+                "title": "Запрос на обновление пользователя",
+                "description": "Запрос, содержащий данные для обновления пользователя",
+                "properties": {
+                    "full_name": {
+                        "description": "Полное имя пользователя",
+                        "type": "string",
+                        "maxLength": 255,
+                        "nullable": true
+                    },
+                    "email": {
+                        "description": "Электронная почта пользователя",
+                        "type": "string",
+                        "format": "email",
+                        "maxLength": 255,
+                        "nullable": true
+                    },
+                    "login": {
+                        "description": "Логин пользователя",
+                        "type": "string",
+                        "maxLength": 255,
+                        "nullable": true
+                    },
+                    "department": {
+                        "description": "Отдел пользователя",
+                        "type": "string",
+                        "maxLength": 255,
+                        "nullable": true
+                    },
+                    "is_active": {
+                        "description": "Статус активности пользователя",
+                        "type": "boolean",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "KeywordResource": {
+                "title": "Keyword Resource",
+                "properties": {
+                    "id": {
+                        "description": "ID ключевого слова",
+                        "type": "integer"
+                    },
+                    "title": {
+                        "description": "Заголовок",
+                        "type": "string"
+                    },
+                    "phrase": {
+                        "description": "Фраза или слово",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "MeetingMemberResource": {
+                "title": "Ресурс участника совещания",
+                "description": "Ресурс, представляющий участника совещания",
+                "properties": {
+                    "id": {
+                        "description": "ID участника совещания",
+                        "type": "integer"
+                    },
+                    "member": {
+                        "$ref": "#/components/schemas/UserResource"
+                    },
+                    "email_sent": {
+                        "description": "Флаг отправки email уведомления",
+                        "type": "boolean"
+                    }
+                },
+                "type": "object"
+            },
+            "MeetingResource": {
+                "title": "Ресурс совещания",
+                "description": "Ресурс, представляющий совещание",
+                "properties": {
+                    "id": {
+                        "description": "ID совещания",
+                        "type": "integer"
+                    },
+                    "theme": {
+                        "description": "Тема совещания",
+                        "type": "string"
+                    },
+                    "link": {
+                        "description": "Ссылка на совещание",
+                        "type": "string"
+                    },
+                    "event_date": {
+                        "description": "Дата совещания",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "event_start_time": {
+                        "description": "Время начала совещания",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "event_end_time": {
+                        "description": "Время окончания совещания",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "members": {
+                        "description": "Список участников совещания",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/MeetingMemberResource"
+                        }
+                    },
+                    "document_path": {
+                        "description": "Путь к документу совещания",
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "ProtocolMemberResource": {
+                "title": "Участник протокола",
+                "description": "Ресурс участника протокола",
+                "properties": {
+                    "id": {
+                        "description": "ID участника протокола",
+                        "type": "integer"
+                    },
+                    "protocol": {
+                        "$ref": "#/components/schemas/ProtocolResource"
+                    },
+                    "member": {
+                        "$ref": "#/components/schemas/UserResource"
+                    }
+                },
+                "type": "object"
+            },
+            "ProtocolResource": {
+                "type": "object",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/Protocol"
+                    }
+                ]
+            },
+            "ProtocolTaskResource": {
+                "title": "Задача протокола",
+                "description": "Ресурс задачи протокола",
+                "properties": {
+                    "id": {
+                        "description": "ID задачи протокола",
+                        "type": "integer"
+                    },
+                    "protocol": {
+                        "$ref": "#/components/schemas/ProtocolResource"
+                    },
+                    "responsible": {
+                        "$ref": "#/components/schemas/UserResource"
+                    },
+                    "essence": {
+                        "description": "Суть задачи",
+                        "type": "string"
+                    },
+                    "deadline": {
+                        "description": "Срок выполнения задачи",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "status": {
+                        "description": "Статус задачи",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "UserResource": {
+                "title": "Пользователь",
+                "description": "Ресурс пользователя",
+                "properties": {
+                    "id": {
+                        "description": "ID пользователя",
+                        "type": "integer"
+                    },
+                    "full_name": {
+                        "description": "Полное имя пользователя",
+                        "type": "string"
+                    },
+                    "email": {
+                        "description": "Электронная почта пользователя",
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "login": {
+                        "description": "Логин пользователя",
+                        "type": "string"
+                    },
+                    "role": {
+                        "description": "Роль пользователя",
+                        "type": "string"
+                    },
+                    "department": {
+                        "description": "Отдел пользователя",
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "description": "Дата и время создания пользователя",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "description": "Дата и время последнего обновления пользователя",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "Keyword": {
+                "title": "Ключевое слово",
+                "description": "Модель ключевого слова",
+                "properties": {
+                    "id": {
+                        "description": "ID ключевого слова",
+                        "type": "integer"
+                    },
+                    "title": {
+                        "description": "Заголовок ключевого слова",
+                        "type": "string"
+                    },
+                    "phrase": {
+                        "description": "Фраза ключевого слова",
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "description": "Дата и время создания ключевого слова",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "description": "Дата и время последнего обновления ключевого слова",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "ManagerSecretary": {
+                "title": "Связь менеджера и секретаря",
+                "description": "Модель связи между менеджером и секретарем",
+                "properties": {
+                    "id": {
+                        "description": "ID связи",
+                        "type": "integer"
+                    },
+                    "manager_id": {
+                        "description": "ID менеджера",
+                        "type": "integer"
+                    },
+                    "secretary_id": {
+                        "description": "ID секретаря",
+                        "type": "integer"
+                    },
+                    "created_at": {
+                        "description": "Дата и время создания связи",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "description": "Дата и время последнего обновления связи",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "Meeting": {
+                "title": "Совещание",
+                "description": "Модель совещания",
+                "properties": {
+                    "id": {
+                        "description": "ID совещания",
+                        "type": "integer"
+                    },
+                    "secretary_id": {
+                        "description": "ID секретаря",
+                        "type": "integer"
+                    },
+                    "theme": {
+                        "description": "Тема совещания",
+                        "type": "string"
+                    },
+                    "link": {
+                        "description": "Ссылка на совещание",
+                        "type": "string"
+                    },
+                    "event_date": {
+                        "description": "Дата совещания",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "event_start_time": {
+                        "description": "Время начала совещания",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "event_end_time": {
+                        "description": "Время окончания совещания",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "created_at": {
+                        "description": "Дата и время создания совещания",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "description": "Дата и время последнего обновления совещания",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "Protocol": {
+                "title": "Протокол",
+                "description": "Модель протокола",
+                "properties": {
+                    "id": {
+                        "description": "ID протокола",
+                        "type": "integer"
+                    },
+                    "theme": {
+                        "description": "Тема протокола",
+                        "type": "string"
+                    },
+                    "agenda": {
+                        "description": "Повестка дня",
+                        "type": "string"
+                    },
+                    "secretary_id": {
+                        "description": "ID секретаря",
+                        "type": "integer"
+                    },
+                    "director_id": {
+                        "description": "ID директора",
+                        "type": "integer"
+                    },
+                    "event_date": {
+                        "description": "Дата события",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "status": {
+                        "description": "Статус протокола",
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "description": "Дата и время создания протокола",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "description": "Дата и время последнего обновления протокола",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "ProtocolMember": {
+                "title": "Участник протокола",
+                "description": "Модель участника протокола",
+                "properties": {
+                    "id": {
+                        "description": "ID участника протокола",
+                        "type": "integer"
+                    },
+                    "protocol_id": {
+                        "description": "ID протокола",
+                        "type": "integer"
+                    },
+                    "member_id": {
+                        "description": "ID участника (пользователя)",
+                        "type": "integer"
+                    },
+                    "created_at": {
+                        "description": "Дата и время создания участника протокола",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "description": "Дата и время последнего обновления участника протокола",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "ProtocolTask": {
+                "title": "Задача протокола",
+                "description": "Модель задачи протокола",
+                "properties": {
+                    "id": {
+                        "description": "ID задачи протокола",
+                        "type": "integer"
+                    },
+                    "protocol_id": {
+                        "description": "ID протокола",
+                        "type": "integer"
+                    },
+                    "responsible_id": {
+                        "description": "ID ответственного пользователя",
+                        "type": "integer"
+                    },
+                    "essence": {
+                        "description": "Суть задачи",
+                        "type": "string",
+                        "maxLength": 65000
+                    },
+                    "deadline": {
+                        "description": "Срок выполнения задачи",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "status": {
+                        "description": "Статус задачи",
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "description": "Дата и время создания задачи",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "description": "Дата и время последнего обновления задачи",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "User": {
+                "title": "Пользователь",
+                "description": "Модель пользователя",
+                "properties": {
+                    "id": {
+                        "description": "ID пользователя",
+                        "type": "integer"
+                    },
+                    "full_name": {
+                        "description": "Полное имя пользователя",
+                        "type": "string"
+                    },
+                    "email": {
+                        "description": "Электронная почта пользователя",
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "password": {
+                        "description": "Пароль пользователя",
+                        "type": "string"
+                    },
+                    "login": {
+                        "description": "Логин пользователя",
+                        "type": "string"
+                    },
+                    "department": {
+                        "description": "Отдел пользователя",
+                        "type": "string"
+                    },
+                    "is_active": {
+                        "description": "Статус активности пользователя",
+                        "type": "boolean"
+                    },
+                    "created_at": {
+                        "description": "Дата и время создания пользователя",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "description": "Дата и время последнего обновления пользователя",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "responses": {
+            "400": {
+                "description": "Время кода подтверждения истекло"
+            }
+        }
+    }
+}
