@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 
 /**
@@ -54,7 +55,14 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *         type="string",
  *         format="date-time",
  *         description="Дата и время последнего обновления пользователя"
- *     )
+ *     ),
+ *     @OA\Property(
+ *           property="avatar",
+ *           type="string",
+ *           format="binary",
+ *           nullable=true,
+ *           description="Avatar image of the user"
+ *       )
  * )
  */
 
@@ -73,6 +81,7 @@ class UserResource extends JsonResource
             "email" => $this->email,
             "login" => $this->login,
             "role" => $this->getRoleNames()->first(),
+            "avatar" => $this->getFirstMedia('avatar')?->getUrl() ?? asset("avatars/default_user_avatar.png"),
             "department" => $this->department,
             "created_at" => $this->created_at,
             "updated_at" => $this->updated_at,

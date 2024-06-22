@@ -45,7 +45,14 @@ use Illuminate\Foundation\Http\FormRequest;
  *         type="boolean",
  *         description="Статус активности пользователя",
  *         nullable=true
- *     )
+ *     ),
+ *     @OA\Property(
+ *          property="avatar",
+ *          type="string",
+ *          format="binary",
+ *          nullable=true,
+ *          description="Avatar image of the user"
+ *      )
  * )
  */
 
@@ -67,11 +74,12 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'full_name' => 'sometimes|max:255',
-            'email' => 'sometimes|email|max:255|unique:users,email,' . $this->route('id'),
-            'login' => 'sometimes|max:255|unique:users,login,' . $this->route('id'),
-            'department' => 'sometimes|max:255',
-            'is_active' => 'sometimes|boolean',
+            'full_name' => ['sometimes', 'max:255'],
+            'email' => ['sometimes', 'email', 'max:255', 'unique:users,email,' . $this->route('id')],
+            'login' => ['sometimes', 'max:255', 'unique:users,login,' . $this->route('id')],
+            'department' => ['sometimes', 'max:255'],
+            'is_active' => ['sometimes', 'boolean'],
+            'avatar' => ['sometimes', 'image'],
         ];
     }
 }

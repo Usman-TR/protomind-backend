@@ -52,7 +52,14 @@ use Illuminate\Foundation\Http\FormRequest;
  *         type="boolean",
  *         description="Внешний пользователь",
  *         nullable=true
- *     )
+ *     ),
+ *     @OA\Property(
+ *           property="avatar",
+ *           type="string",
+ *           format="binary",
+ *           nullable=true,
+ *           description="Avatar image of the user"
+ *       )
  * )
  */
 
@@ -74,12 +81,13 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'full_name' => ['required_if:external,false', 'nullable', 'max:255'],
-            'email' => ['required_if:external,false', 'nullable', 'email', 'max:255', 'unique:users'],
-            'password' => ['required_if:external,false', 'nullable', 'min:6'],
-            'login' => ['required_if:external,false', 'nullable', 'max:255', 'unique:users'],
-            'department' => ['required_if:external,false', 'nullable', 'max:255'],
+            'full_name' => ['required_without:external', 'nullable', 'max:255'],
+            'email' => ['required_without:external', 'nullable', 'email', 'max:255', 'unique:users'],
+            'password' => ['required_without:external', 'nullable', 'min:6'],
+            'login' => ['required_without:external', 'nullable', 'max:255', 'unique:users'],
+            'department' => ['required_without:external', 'nullable', 'max:255'],
             'external' => ['sometimes', 'boolean'],
+            'avatar' => ['sometimes', 'image'],
         ];
     }
 }

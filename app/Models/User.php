@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
@@ -67,17 +69,25 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  *         type="string",
  *         format="date-time",
  *         description="Дата и время последнего обновления пользователя"
- *     )
+ *     ),
+ *     @OA\Property(
+ *           property="avatar",
+ *           type="string",
+ *           format="binary",
+ *           nullable=true,
+ *           description="Avatar image of the user"
+ *       )
  * )
  */
 
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable implements JWTSubject, HasMedia
 {
     use HasApiTokens,
         HasFactory,
         Notifiable,
         HasRoles,
-        Filterable;
+        Filterable,
+        InteractsWithMedia;
 
     protected string $guard_name = 'api';
 
@@ -93,6 +103,7 @@ class User extends Authenticatable implements JWTSubject
         'login',
         'department',
         'is_active',
+        'avatar',
     ];
 
     /**

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enums\RolesEnum;
 use App\Models\ManagerSecretary;
 use App\Models\User;
+use Exception;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
@@ -17,7 +18,7 @@ class UserService
     /**
      * @param array $data
      * @return User
-     * @throws \Exception
+     * @throws Exception
      */
     public function create(array $data): User
     {
@@ -44,10 +45,14 @@ class UserService
                 ]);
             }
 
+            if(isset($data['avatar']) && $data['avatar']) {
+                $newUser->addMedia($data['avatar'])->toMediaCollection('avatar');
+            }
+
             return $newUser->assignRole($role->name);
         }
 
-        throw new \Exception(self::ERROR_MESSAGES['unexpectedRole']);
+        throw new Exception(self::ERROR_MESSAGES['unexpectedRole']);
     }
 
     /**

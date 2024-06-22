@@ -168,9 +168,16 @@ class UserController extends Controller
 
         $validated = $request->validated();
 
+        if(isset($validated['avatar']) && $validated['avatar']) {
+            $user->clearMediaCollection('avatar');
+            $user->addMediaFromRequest('avatar')->toMediaCollection('avatar');
+        }
+
         $user->update($validated);
 
-        return ResponseService::success($user);
+        return ResponseService::success(
+            UserResource::make($user->fresh())
+        );
     }
 
     /**

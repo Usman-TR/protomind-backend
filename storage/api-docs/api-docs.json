@@ -1815,6 +1815,12 @@
                         "description": "Внешний пользователь",
                         "type": "boolean",
                         "nullable": true
+                    },
+                    "avatar": {
+                        "description": "Avatar image of the user",
+                        "type": "string",
+                        "format": "binary",
+                        "nullable": true
                     }
                 },
                 "type": "object"
@@ -1851,6 +1857,12 @@
                     "is_active": {
                         "description": "Статус активности пользователя",
                         "type": "boolean",
+                        "nullable": true
+                    },
+                    "avatar": {
+                        "description": "Avatar image of the user",
+                        "type": "string",
+                        "format": "binary",
                         "nullable": true
                     }
                 },
@@ -2031,6 +2043,12 @@
                         "description": "Дата и время последнего обновления пользователя",
                         "type": "string",
                         "format": "date-time"
+                    },
+                    "avatar": {
+                        "description": "Avatar image of the user",
+                        "type": "string",
+                        "format": "binary",
+                        "nullable": true
                     }
                 },
                 "type": "object"
@@ -2301,6 +2319,12 @@
                         "description": "Дата и время последнего обновления пользователя",
                         "type": "string",
                         "format": "date-time"
+                    },
+                    "avatar": {
+                        "description": "Avatar image of the user",
+                        "type": "string",
+                        "format": "binary",
+                        "nullable": true
                     }
                 },
                 "type": "object"
