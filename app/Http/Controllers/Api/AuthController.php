@@ -76,7 +76,8 @@ class AuthController extends Controller
         ];
 
         $token = Auth::attempt($credentials);
-        if (!$token) return ResponseService::unauthorized();
+
+        if (!$token) return ResponseService::unauthorized(message: __('auth.failed'));
 
         $user = Auth::user();
 

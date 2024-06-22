@@ -16,6 +16,10 @@ use Illuminate\Http\JsonResponse;
 class UserController extends Controller
 {
 
+    public function __construct(private readonly UserService $userService)
+    {
+    }
+
     /**
      * @OA\Get(
      *     path="/api/users",
@@ -72,10 +76,6 @@ class UserController extends Controller
         return ResponseService::success(
             UserResource::collection($query->latest()->get())
         );
-    }
-
-    public function __construct(private readonly UserService $userService)
-    {
     }
 
     /**
