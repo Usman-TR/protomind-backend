@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Services\ResponseService;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -171,6 +172,12 @@ class UserController extends Controller
         if(isset($validated['avatar']) && $validated['avatar']) {
             $user->clearMediaCollection('avatar');
             $user->addMediaFromRequest('avatar')->toMediaCollection('avatar');
+        }
+
+        if (empty($validated['password'])) {
+            unset($validated['password']);
+        } else {
+            $validated['password'] = Hash::make($validated['password']);
         }
 
         $user->update($validated);
