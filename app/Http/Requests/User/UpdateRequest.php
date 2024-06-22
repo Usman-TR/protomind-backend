@@ -47,6 +47,12 @@ use Illuminate\Foundation\Http\FormRequest;
  *         nullable=true
  *     ),
  *     @OA\Property(
+ *          property="password",
+ *          type="string",
+ *          description="mypassword",
+ *          nullable=true
+ *      ),
+ *     @OA\Property(
  *          property="avatar",
  *          type="string",
  *          format="binary",
@@ -75,8 +81,9 @@ class UpdateRequest extends FormRequest
     {
         return [
             'full_name' => ['sometimes', 'max:255'],
-            'email' => ['sometimes', 'email', 'max:255', 'unique:users,email,' . $this->route('id')],
-            'login' => ['sometimes', 'max:255', 'unique:users,login,' . $this->route('id')],
+            'password' => ['sometimes', 'max:255', 'min:6'],
+            'email' => ['sometimes', 'email', 'max:255', 'unique:users,email'],
+            'login' => ['sometimes', 'max:255', 'unique:users,login'],
             'department' => ['sometimes', 'max:255'],
             'is_active' => ['sometimes', 'boolean'],
             'avatar' => ['sometimes', 'image'],
