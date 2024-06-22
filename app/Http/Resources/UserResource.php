@@ -81,7 +81,7 @@ class UserResource extends JsonResource
             "email" => $this->email,
             "login" => $this->login,
             "role" => $this->getRoleNames()->first(),
-            "avatar" => $this->getFirstMedia('avatar')?->getUrl() ?? Storage::url("avatars/default_user_avatar.png"),
+            "avatar" => $this->getFirstMedia('avatar')?->getUrl() ?? Storage::url("avatars/default_user_avatar.jpg"),
             "department" => $this->department,
             "created_at" => $this->created_at,
             "updated_at" => $this->updated_at,
