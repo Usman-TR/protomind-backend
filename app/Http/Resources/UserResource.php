@@ -45,11 +45,6 @@ use Illuminate\Support\Facades\Storage;
  *         description="Отдел пользователя"
  *     ),
  *     @OA\Property(
- *          property="role",
- *          type="string",
- *          description="manager"
- *      ),
- *     @OA\Property(
  *         property="created_at",
  *         type="string",
  *         format="date-time",
