@@ -45,6 +45,11 @@ use Illuminate\Support\Facades\Storage;
  *         description="Отдел пользователя"
  *     ),
  *     @OA\Property(
+ *          property="role",
+ *          type="string",
+ *          description="manager"
+ *      ),
+ *     @OA\Property(
  *         property="created_at",
  *         type="string",
  *         format="date-time",
@@ -81,7 +86,7 @@ class UserResource extends JsonResource
             "email" => $this->email,
             "login" => $this->login,
             "role" => $this->getRoleNames()->first(),
-            "avatar" => $this->getFirstMedia('avatar')?->getUrl() ?? asset("avatars/default_user_avatar.png"),
+            "avatar" => $this->getFirstMedia('avatar')?->getUrl() ?? Storage::url("avatars/default_user_avatar.png"),
             "department" => $this->department,
             "created_at" => $this->created_at,
             "updated_at" => $this->updated_at,
