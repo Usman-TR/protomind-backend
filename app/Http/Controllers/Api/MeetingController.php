@@ -79,7 +79,7 @@ class MeetingController extends Controller
      *     )
      * )
      */
-    public function store(StoreRequest $request): JsonResponse
+    public function store(StoreRequest $request)
     {
         $validated = $request->validated();
 

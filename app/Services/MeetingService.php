@@ -16,11 +16,9 @@ class MeetingService
             ->notify(new SendMeetingNotification($meeting));
     }
 
-    public function create(array $data): ?Meeting
+    public function create(array $data): Meeting
     {
-        $meeting = null;
-
-        DB::transaction(function() use ($data, &$meeting) {
+        return DB::transaction(function() use ($data) {
             $meeting = Meeting::create($data);
 
             if(isset($data['document']) && $data['document']) {
@@ -29,7 +27,7 @@ class MeetingService
 
             $currentTime = now();
 
-            foreach($data['member'] as $member) {
+            foreach($data['members'] as $member) {
                 MeetingMember::create([
                     'meeting_id' => $meeting->id,
                     'member_id' => $member['member_id'],
@@ -38,12 +36,12 @@ class MeetingService
                     'created_at' => $currentTime,
                 ]);
             }
-        });
 
-        return $meeting;
+            return $meeting;
+        });
     }
 
-    public function update(Meeting $meeting, array $data)
+    public function update(Meeting $meeting, array $data): void
     {
         $meeting->update($data);
 

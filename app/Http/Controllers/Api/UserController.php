@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Services\ResponseService;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -46,6 +47,15 @@ class UserController extends Controller
      *         description="Поиск по электронной почте",
      *         @OA\Schema(type="string")
      *     ),
+     *     @OA\Parameter(
+     *          name="role",
+     *          in="query",
+     *          description="Получает юзеров только заданной роли",
+     *          @OA\Schema(
+     *              type="string",
+     *              enum={"manager", "external", "secretary"}
+     *          )
+     *      ),
      *     @OA\Response(
      *         response=200,
      *         description="Успешная операция",
@@ -60,11 +70,19 @@ class UserController extends Controller
      *     )
      * )
      */
-    public function index(UserFilter $filter): JsonResponse
+    public function index(Request $request, UserFilter $filter): JsonResponse
     {
         $user = auth()->user();
 
+        $limit = $request->input('limit', config('constants.paginator.limit'));
+
         $query = User::filter($filter);
+
+        if($user->hasRole(RolesEnum::SECRETARY->value)) {
+            $query = $query->whereHas('roles', function($q) {
+                $q->whereNot('name', 'admin');
+            })->whereNot('id', $user->id);
+        }
 
         if($user->hasRole(RolesEnum::MANAGER->value)) {
             $query = $query->secretaries();
@@ -75,7 +93,7 @@ class UserController extends Controller
         }
 
         return ResponseService::success(
-            UserResource::collection($query->latest()->get())
+            UserResource::collection($query->latest()->paginate($limit))->response()->getData(true)
         );
     }
 

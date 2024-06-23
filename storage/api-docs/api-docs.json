@@ -1275,6 +1275,19 @@
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "name": "role",
+                        "in": "query",
+                        "description": "Получает юзеров только заданной роли",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "manager",
+                                "external",
+                                "secretary"
+                            ]
+                        }
                     }
                 ],
                 "responses": {
@@ -1857,6 +1870,11 @@
                     "is_active": {
                         "description": "Статус активности пользователя",
                         "type": "boolean",
+                        "nullable": true
+                    },
+                    "password": {
+                        "description": "mypassword",
+                        "type": "string",
                         "nullable": true
                     },
                     "avatar": {

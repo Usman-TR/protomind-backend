@@ -73,7 +73,7 @@ class MeetingResource extends JsonResource
             'link' => $this->link,
             'event_date' => $this->event_date,
             'members' => MeetingMemberResource::collection($this->members),
-            'document_path' => $this->getFirstMediaUrl('document') ?: null,
+            'document_path' => $this->getFirstMedia('document')?->getUrl() ?: null,
         ];
     }
 }
