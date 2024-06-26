@@ -44,7 +44,7 @@ class KeywordController extends Controller
     {
         $keywords = Keyword::latest()->get();
 
-        return ResponseService::success(KeywordResource::make($keywords));
+        return ResponseService::success(KeywordResource::collection($keywords));
     }
 
     /**

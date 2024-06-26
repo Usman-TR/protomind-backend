@@ -6,6 +6,7 @@ namespace App\Models;
 use App\Http\Filters\Traits\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -145,9 +146,9 @@ class User extends Authenticatable implements JWTSubject, HasMedia
         return $this->belongsTo(User::class, 'manager_id');
     }
 
-    public function secretaries(): HasMany
+    public function secretaries(): BelongsToMany
     {
-        return $this->hasMany(User::class, 'manager_id');
+        return $this->belongsToMany(User::class, 'manager_secretaries', 'manager_id', 'secretary_id');
     }
 
     public function meetings(): HasMany

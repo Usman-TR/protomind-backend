@@ -72,28 +72,12 @@ class UserController extends Controller
      */
     public function index(Request $request, UserFilter $filter): JsonResponse
     {
-        $user = auth()->user();
+        $queryParams = $request->all();
 
-        $limit = $request->input('limit', config('constants.paginator.limit'));
-
-        $query = User::filter($filter);
-
-        if($user->hasRole(RolesEnum::SECRETARY->value)) {
-            $query = $query->whereHas('roles', function($q) {
-                $q->whereNot('name', 'admin');
-            })->whereNot('id', $user->id);
-        }
-
-        if($user->hasRole(RolesEnum::MANAGER->value)) {
-            $query = $query->secretaries();
-        }
-
-        if($user->hasRole(RolesEnum::ADMIN->value)) {
-            $query = $query->whereNot('id', $user->id);
-        }
+        $users = $this->userService->getAll($queryParams, $filter);
 
         return ResponseService::success(
-            UserResource::collection($query->latest()->paginate($limit))->response()->getData(true)
+            UserResource::collection($users)->response()->getData(true)
         );
     }
 
