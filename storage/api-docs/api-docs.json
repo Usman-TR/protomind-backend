@@ -258,6 +258,36 @@
                     }
                 }
             },
+            "put": {
+                "tags": [
+                    "Keywords"
+                ],
+                "summary": "Обновление существующих ключевых слов",
+                "description": "Метод для обновления существующего ключевого слова",
+                "operationId": "updateKeyword",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/KeywordUpdateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KeywordResource"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "Keywords"
@@ -293,46 +323,6 @@
             }
         },
         "/api/keywords/{id}": {
-            "put": {
-                "tags": [
-                    "Keywords"
-                ],
-                "summary": "Обновление существующего ключевого слова",
-                "description": "Метод для обновления существующего ключевого слова",
-                "operationId": "updateKeyword",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/KeywordUpdateRequest"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/KeywordResource"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
             "delete": {
                 "tags": [
                     "Keywords"
