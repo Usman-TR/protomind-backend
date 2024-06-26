@@ -97,13 +97,20 @@ class KeywordController extends Controller
      * )
      *
      * @param UpdateRequest $request
+     * @param string $id
      * @return JsonResponse
      */
-    public function update(UpdateRequest $request): JsonResponse
+    public function update(UpdateRequest $request, string $id): JsonResponse
     {
-        $keywords = $this->service->update($request->validated());
+        $keyword = Keyword::find($id);
 
-        return ResponseService::success(KeywordResource::collection($keywords));
+        if(!$keyword) {
+            return ResponseService::notFound(message: 'Ничего не найдено.');
+        }
+
+        $keyword->update($request->validated());
+
+        return ResponseService::success(KeywordResource::make($keyword));
     }
 
     /**

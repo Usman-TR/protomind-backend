@@ -55,10 +55,8 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'keywords' => ['required', 'array'],
-            'keywords.*.id' => ['requried', 'exists:protocol_keywords,id'],
-            'keywords.*.title' => ['required', 'string'],
-            'keywords.*.phrase' => ['required', 'string'],
+            'title' => ['sometimes', 'string', 'max:255'],
+            'phrase' => ['sometimes', 'string', 'max:255'],
         ];
     }
 }

@@ -49,7 +49,7 @@ Route::group(["middleware" => "auth:api"], function() {
     Route::prefix('keywords')->controller(KeywordController::class)->group(function () {
         Route::get('/', 'index');
         Route::post('/', 'store');
-        Route::put('/', 'update');
+        Route::put('/{id}', 'update');
         Route::delete('/{id}', 'destroy');
     });
 
