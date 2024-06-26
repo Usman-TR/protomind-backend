@@ -12,28 +12,15 @@ use Illuminate\Foundation\Http\FormRequest;
  *     title="Запрос на обновление ключевых слов",
  *     description="Запрос, содержащий список ключевых слов для обновления",
  *     @OA\Property(
- *         property="keywords",
- *         type="array",
- *         description="Список ключевых слов",
- *         @OA\Items(
- *             type="object",
- *             @OA\Property(
- *                  property="id",
- *                  type="integer",
- *                  description="ID"
- *              ),
- *             @OA\Property(
- *                 property="title",
- *                 type="string",
- *                 description="Заголовок ключевого слова"
- *             ),
- *             @OA\Property(
- *                 property="phrase",
- *                 type="string",
- *                 description="Фраза ключевого слова"
- *             )
- *         )
- *     )
+ *          property="title",
+ *          type="string",
+ *          description="Заголовок ключевого слова"
+ *      ),
+ *      @OA\Property(
+ *          property="phrase",
+ *          type="string",
+ *          description="Фраза ключевого слова"
+ *      )
  * )
  */
 

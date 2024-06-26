@@ -265,6 +265,16 @@
                 "summary": "Обновление существующих ключевых слов",
                 "description": "Метод для обновления существующего ключевого слова",
                 "operationId": "updateKeyword",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1483,26 +1493,13 @@
                 "title": "Запрос на обновление ключевых слов",
                 "description": "Запрос, содержащий список ключевых слов для обновления",
                 "properties": {
-                    "keywords": {
-                        "description": "Список ключевых слов",
-                        "type": "array",
-                        "items": {
-                            "properties": {
-                                "id": {
-                                    "description": "ID",
-                                    "type": "integer"
-                                },
-                                "title": {
-                                    "description": "Заголовок ключевого слова",
-                                    "type": "string"
-                                },
-                                "phrase": {
-                                    "description": "Фраза ключевого слова",
-                                    "type": "string"
-                                }
-                            },
-                            "type": "object"
-                        }
+                    "title": {
+                        "description": "Заголовок ключевого слова",
+                        "type": "string"
+                    },
+                    "phrase": {
+                        "description": "Фраза ключевого слова",
+                        "type": "string"
                     }
                 },
                 "type": "object"

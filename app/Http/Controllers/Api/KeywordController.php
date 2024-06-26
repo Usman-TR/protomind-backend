@@ -85,6 +85,14 @@ class KeywordController extends Controller
      *     tags={"Keywords"},
      *     summary="Обновление существующих ключевых слов",
      *     description="Метод для обновления существующего ключевого слова",
+     *     @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *      ),
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(ref="#/components/schemas/KeywordUpdateRequest")
