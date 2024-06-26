@@ -111,7 +111,7 @@ class KeywordController extends Controller
     {
         $keywords = $this->service->update($request->validated());
 
-        return ResponseService::success(KeywordResource::make($keywords));
+        return ResponseService::success(KeywordResource::collection($keywords));
     }
 
     /**
