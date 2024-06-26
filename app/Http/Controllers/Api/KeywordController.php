@@ -80,10 +80,10 @@ class KeywordController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/api/keywords/{id}",
+     *     path="/api/keywords",
      *     operationId="updateKeyword",
      *     tags={"Keywords"},
-     *     summary="Обновление существующего ключевого слова",
+     *     summary="Обновление существующих ключевых слов",
      *     description="Метод для обновления существующего ключевого слова",
      *     @OA\Parameter(
      *         name="id",
