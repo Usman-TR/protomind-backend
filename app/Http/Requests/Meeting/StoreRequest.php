@@ -12,14 +12,10 @@ use Illuminate\Foundation\Http\FormRequest;
  *     title="Запрос на создание совещания",
  *     description="Запрос, содержащий данные для создания совещания",
  *     @OA\Property(
- *         property="secretary_id",
- *         type="integer",
- *         description="ID секретаря"
- *     ),
- *     @OA\Property(
  *         property="document",
  *         type="string",
  *         format="binary",
+ *         nullable=true,
  *         description="Документ совещания"
  *     ),
  *     @OA\Property(
@@ -90,14 +86,13 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'secretary_id' => ['required', 'integer', 'exists:users,id'],
             'document' => ['nullable', 'file'],
             'theme' => ['required', 'string', 'max:255'],
             'link' => ['required', 'string', 'max:255'],
             'event_date' => ['required', 'date', 'date_format:Y-m-d'],
             'event_start_time' => ['required', 'date', 'date_format:Y-m-d H:i'],
             'event_end_time' => ['required', 'date', 'date_format:Y-m-d H:i'],
-            'members' => ['required', 'array'],
+            'members' => ['array'],
             'members.*.member_id' => ['required', 'integer', 'exists:users,id'],
             'members.*.should_notify' => ['required', 'boolean'],
         ];

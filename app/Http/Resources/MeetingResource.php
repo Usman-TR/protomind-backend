@@ -12,6 +12,10 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *     title="Ресурс совещания",
  *     description="Ресурс, представляющий совещание",
  *     @OA\Property(
+ *          property="secretary",
+ *          ref="#/components/schemas/UserResource"
+ *      ),
+ *     @OA\Property(
  *         property="id",
  *         type="integer",
  *         description="ID совещания"
@@ -51,9 +55,9 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *         @OA\Items(ref="#/components/schemas/MeetingMemberResource")
  *     ),
  *     @OA\Property(
- *         property="document_path",
+ *         property="document_url",
  *         type="string",
- *         description="Путь к документу совещания",
+ *         description="URL к документу совещания",
  *         nullable=true
  *     )
  * )
@@ -71,9 +75,12 @@ class MeetingResource extends JsonResource
             'id' => $this->id,
             'theme' => $this->theme,
             'link' => $this->link,
+            'secretary' => UserResource::make($this->secretary),
             'event_date' => $this->event_date,
+            'event_start_time' => $this->event_start_time,
+            'event_end_time' => $this->event_end_time,
             'members' => MeetingMemberResource::collection($this->members),
-            'document_path' => $this->getFirstMedia('document')?->getUrl() ?: null,
+            'document_url' => $this->getFirstMedia('document')?->getUrl() ?: null,
         ];
     }
 }

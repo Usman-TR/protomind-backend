@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Http\Filters\Traits\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -68,7 +70,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  */
 class Meeting extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia;
+    use HasFactory, InteractsWithMedia, Filterable;
 
     protected $fillable = [
         'secretary_id',
@@ -82,5 +84,10 @@ class Meeting extends Model implements HasMedia
     public function members(): HasMany
     {
         return $this->hasMany(MeetingMember::class);
+    }
+
+    public function secretary(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'secretary_id');
     }
 }

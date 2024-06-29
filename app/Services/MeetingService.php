@@ -19,6 +19,8 @@ class MeetingService
     public function create(array $data): Meeting
     {
         return DB::transaction(function() use ($data) {
+            $data['secretary_id'] = auth()->id();
+
             $meeting = Meeting::create($data);
 
             if(isset($data['document']) && $data['document']) {
@@ -27,14 +29,16 @@ class MeetingService
 
             $currentTime = now();
 
-            foreach($data['members'] as $member) {
-                MeetingMember::create([
-                    'meeting_id' => $meeting->id,
-                    'member_id' => $member['member_id'],
-                    'email_sent' => $member['should_notify'],
-                    'updated_at' => $currentTime,
-                    'created_at' => $currentTime,
-                ]);
+            if(isset($data['members'])) {
+                foreach($data['members'] as $member) {
+                    MeetingMember::create([
+                        'meeting_id' => $meeting->id,
+                        'member_id' => $member['member_id'],
+                        'email_sent' => $member['should_notify'],
+                        'updated_at' => $currentTime,
+                        'created_at' => $currentTime,
+                    ]);
+                }
             }
 
             return $meeting;

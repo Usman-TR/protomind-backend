@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Filters\MeetingFilter;
 use App\Http\Requests\Meeting\StoreRequest;
 use App\Http\Requests\Meeting\UpdateRequest;
 use App\Http\Resources\MeetingResource;
@@ -27,6 +28,39 @@ class MeetingController extends Controller
      *     tags={"Meetings"},
      *     summary="Показать список совещаний",
      *     description="Метод для отображения списка совещаний",
+     *     @OA\Parameter(
+     *          name="start_date_at",
+     *          in="query",
+     *          required=false,
+     *          @OA\Schema(
+     *              type="string",
+     *              format="date",
+     *              example="2024-01-01"
+     *          ),
+     *          description="Начальная дата в формате год-месяц-день"
+     *      ),
+     *      @OA\Parameter(
+     *          name="end_date_at",
+     *          in="query",
+     *          required=false,
+     *          @OA\Schema(
+     *              type="string",
+     *              format="date",
+     *              example="2024-12-31"
+     *          ),
+     *          description="Конечная дата в формате год-месяц-день"
+     *      ),
+     *      @OA\Parameter(
+     *          name="date",
+     *          in="query",
+     *          required=false,
+     *          @OA\Schema(
+     *              type="string",
+     *              format="date",
+     *              example="2024-06-28"
+     *          ),
+     *          description="Фильтр по конкретной дате в формате год-месяц-день"
+     *      ),
      *     @OA\Response(
      *         response=200,
      *         description="Успешная операция",
@@ -41,9 +75,9 @@ class MeetingController extends Controller
      *     )
      * )
      */
-    public function index(): JsonResponse
+    public function index(MeetingFilter $filter): JsonResponse
     {
-        $meetings = auth()->user()->meetings;
+        $meetings = auth()->user()->meetings()->filter($filter)->get();
 
         return ResponseService::success(
             MeetingResource::collection($meetings)
@@ -79,7 +113,7 @@ class MeetingController extends Controller
      *     )
      * )
      */
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request): JsonResponse
     {
         $validated = $request->validated();
 

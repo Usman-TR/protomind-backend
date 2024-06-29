@@ -394,6 +394,41 @@
                 "summary": "Показать список совещаний",
                 "description": "Метод для отображения списка совещаний",
                 "operationId": "indexMeetings",
+                "parameters": [
+                    {
+                        "name": "start_date_at",
+                        "in": "query",
+                        "description": "Начальная дата в формате год-месяц-день",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2024-01-01"
+                        }
+                    },
+                    {
+                        "name": "end_date_at",
+                        "in": "query",
+                        "description": "Конечная дата в формате год-месяц-день",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2024-12-31"
+                        }
+                    },
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "description": "Фильтр по конкретной дате в формате год-месяц-день",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2024-06-28"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Успешная операция",
@@ -1508,14 +1543,11 @@
                 "title": "Запрос на создание совещания",
                 "description": "Запрос, содержащий данные для создания совещания",
                 "properties": {
-                    "secretary_id": {
-                        "description": "ID секретаря",
-                        "type": "integer"
-                    },
                     "document": {
                         "description": "Документ совещания",
                         "type": "string",
-                        "format": "binary"
+                        "format": "binary",
+                        "nullable": true
                     },
                     "theme": {
                         "description": "Тема совещания",
@@ -1913,6 +1945,9 @@
                 "title": "Ресурс совещания",
                 "description": "Ресурс, представляющий совещание",
                 "properties": {
+                    "secretary": {
+                        "$ref": "#/components/schemas/UserResource"
+                    },
                     "id": {
                         "description": "ID совещания",
                         "type": "integer"
@@ -1947,8 +1982,8 @@
                             "$ref": "#/components/schemas/MeetingMemberResource"
                         }
                     },
-                    "document_path": {
-                        "description": "Путь к документу совещания",
+                    "document_url": {
+                        "description": "URL к документу совещания",
                         "type": "string",
                         "nullable": true
                     }
