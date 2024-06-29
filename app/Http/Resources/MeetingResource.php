@@ -39,14 +39,14 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *     @OA\Property(
  *         property="event_start_time",
  *         type="string",
- *         format="date-time",
- *         description="Время начала совещания"
+ *         format="time",
+ *         description="Время начала совещания в формате часы-минуты"
  *     ),
  *     @OA\Property(
  *         property="event_end_time",
  *         type="string",
- *         format="date-time",
- *         description="Время окончания совещания"
+ *         format="time",
+ *         description="Время окончания совещания в формате часы-минуты"
  *     ),
  *     @OA\Property(
  *         property="members",

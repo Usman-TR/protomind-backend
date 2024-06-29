@@ -1567,15 +1567,15 @@
                     "event_start_time": {
                         "description": "Время начала совещания",
                         "type": "string",
-                        "format": "date-time"
+                        "format": "time"
                     },
                     "event_end_time": {
-                        "description": "Время окончания совещания",
+                        "description": "Время окончания совещания в формате часы-минуты",
                         "type": "string",
-                        "format": "date-time"
+                        "format": "time"
                     },
                     "members": {
-                        "description": "Список участников совещания",
+                        "description": "Список участников совещания в формате часы-минуты",
                         "type": "array",
                         "items": {
                             "properties": {
@@ -1623,15 +1623,15 @@
                         "nullable": true
                     },
                     "event_start_time": {
-                        "description": "Время начала совещания",
+                        "description": "Время начала совещания в формате часы-минуты",
                         "type": "string",
                         "format": "date-time",
                         "nullable": true
                     },
                     "event_end_time": {
-                        "description": "Время окончания совещания",
+                        "description": "Время окончания совещания в формате часы-минуты",
                         "type": "string",
-                        "format": "date-time",
+                        "format": "time",
                         "nullable": true
                     },
                     "members": {

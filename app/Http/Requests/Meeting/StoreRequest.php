@@ -39,19 +39,19 @@ use Illuminate\Foundation\Http\FormRequest;
  *     @OA\Property(
  *         property="event_start_time",
  *         type="string",
- *         format="date-time",
+ *         format="time",
  *         description="Время начала совещания"
  *     ),
  *     @OA\Property(
  *         property="event_end_time",
  *         type="string",
- *         format="date-time",
- *         description="Время окончания совещания"
+ *         format="time",
+ *         description="Время окончания совещания в формате часы-минуты"
  *     ),
  *     @OA\Property(
  *         property="members",
  *         type="array",
- *         description="Список участников совещания",
+ *         description="Список участников совещания в формате часы-минуты",
  *         @OA\Items(
  *             type="object",
  *             @OA\Property(
@@ -90,8 +90,8 @@ class StoreRequest extends FormRequest
             'theme' => ['required', 'string', 'max:255'],
             'link' => ['required', 'string', 'max:255'],
             'event_date' => ['required', 'date', 'date_format:Y-m-d'],
-            'event_start_time' => ['required', 'date', 'date_format:Y-m-d H:i'],
-            'event_end_time' => ['required', 'date', 'date_format:Y-m-d H:i'],
+            'event_start_time' => ['required', 'date_format:H:i'],
+            'event_end_time' => ['required', 'date_format:H:i'],
             'members' => ['array'],
             'members.*.member_id' => ['required', 'integer', 'exists:users,id'],
             'members.*.should_notify' => ['required', 'boolean'],

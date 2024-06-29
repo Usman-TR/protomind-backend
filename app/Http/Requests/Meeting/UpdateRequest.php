@@ -42,14 +42,14 @@ use Illuminate\Foundation\Http\FormRequest;
  *         property="event_start_time",
  *         type="string",
  *         format="date-time",
- *         description="Время начала совещания",
+ *         description="Время начала совещания в формате часы-минуты",
  *         nullable=true
  *     ),
  *     @OA\Property(
  *         property="event_end_time",
  *         type="string",
- *         format="date-time",
- *         description="Время окончания совещания",
+ *         format="time",
+ *         description="Время окончания совещания в формате часы-минуты",
  *         nullable=true
  *     ),
  *     @OA\Property(
@@ -95,8 +95,8 @@ class UpdateRequest extends FormRequest
             'document' => ['sometimes', 'file'],
             'link' => ['sometimes', 'string', 'max:255'],
             'event_date' => ['sometimes', 'date', 'date_format:Y-m-d'],
-            'event_start_time' => ['sometimes', 'date', 'date_format:Y-m-d H:i'],
-            'event_end_time' => ['sometimes', 'date', 'date_format:Y-m-d H:i'],
+            'event_start_time' => ['sometimes', 'date_format:H:i'],
+            'event_end_time' => ['sometimes', 'date_format:H:i'],
             'members' => ['sometimes', 'array'],
             'members.*.member_id' => ['required_with:members', 'integer', 'exists:users,id'],
             'members.*.should_notify' => ['required_with:members', 'boolean'],
