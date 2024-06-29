@@ -50,17 +50,6 @@ class MeetingController extends Controller
      *          ),
      *          description="Конечная дата в формате год-месяц-день"
      *      ),
-     *      @OA\Parameter(
-     *          name="date",
-     *          in="query",
-     *          required=false,
-     *          @OA\Schema(
-     *              type="string",
-     *              format="date",
-     *              example="2024-06-28"
-     *          ),
-     *          description="Фильтр по конкретной дате в формате год-месяц-день"
-     *      ),
      *     @OA\Response(
      *         response=200,
      *         description="Успешная операция",

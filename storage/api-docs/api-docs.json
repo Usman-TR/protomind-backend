@@ -416,17 +416,6 @@
                             "format": "date",
                             "example": "2024-12-31"
                         }
-                    },
-                    {
-                        "name": "date",
-                        "in": "query",
-                        "description": "Фильтр по конкретной дате в формате год-месяц-день",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "format": "date",
-                            "example": "2024-06-28"
-                        }
                     }
                 ],
                 "responses": {
@@ -1966,14 +1955,14 @@
                         "format": "date"
                     },
                     "event_start_time": {
-                        "description": "Время начала совещания",
+                        "description": "Время начала совещания в формате часы-минуты",
                         "type": "string",
-                        "format": "date-time"
+                        "format": "time"
                     },
                     "event_end_time": {
-                        "description": "Время окончания совещания",
+                        "description": "Время окончания совещания в формате часы-минуты",
                         "type": "string",
-                        "format": "date-time"
+                        "format": "time"
                     },
                     "members": {
                         "description": "Список участников совещания",

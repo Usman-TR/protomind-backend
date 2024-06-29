@@ -15,9 +15,4 @@ class MeetingFilter extends QueryFilter
     {
         $this->builder->whereDate('event_date', '<=', $value);
     }
-
-    public function date($value): void
-    {
-        $this->builder->whereDate('event_date', $value);
-    }
 }
