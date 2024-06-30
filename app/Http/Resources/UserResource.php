@@ -30,11 +30,6 @@ use Illuminate\Support\Facades\Storage;
  *         description="Электронная почта пользователя"
  *     ),
  *     @OA\Property(
- *         property="login",
- *         type="string",
- *         description="Логин пользователя"
- *     ),
- *     @OA\Property(
  *         property="role",
  *         type="string",
  *         description="Роль пользователя"
@@ -79,7 +74,6 @@ class UserResource extends JsonResource
             "id" => $this->id,
             "full_name" => $this->full_name,
             "email" => $this->email,
-            "login" => $this->login,
             "role" => $this->getRoleNames()->first(),
             "avatar" => $this->getFirstMedia('avatar')?->getUrl() ?? Storage::url("avatars/default_user_avatar.jpg"),
             "department" => $this->department,

@@ -83,7 +83,6 @@ class UpdateRequest extends FormRequest
             'full_name' => ['sometimes', 'max:255'],
             'password' => ['sometimes', 'max:255', 'min:6'],
             'email' => ['sometimes', 'email', 'max:255', 'unique:users,email,' . $this->route('user')],
-            'login' => ['sometimes', 'max:255', 'unique:users,login,' . $this->route('user')],
             'department' => ['sometimes', 'max:255'],
             'is_active' => ['sometimes', 'boolean'],
             'avatar' => ['sometimes', 'image'],

@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\ProtocolDocumentController;
 use App\Http\Controllers\Api\ProtocolMemberController;
 use App\Http\Controllers\Api\ProtocolTaskController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\VerificationController;
 use Illuminate\Support\Facades\Route;
 
 /*

@@ -34,13 +34,6 @@ use Illuminate\Foundation\Http\FormRequest;
  *         nullable=true
  *     ),
  *     @OA\Property(
- *         property="login",
- *         type="string",
- *         description="Логин пользователя",
- *         maxLength=255,
- *         nullable=true
- *     ),
- *     @OA\Property(
  *         property="department",
  *         type="string",
  *         description="Отдел пользователя",
@@ -84,7 +77,6 @@ class StoreRequest extends FormRequest
             'full_name' => ['required_if:external,false', 'nullable', 'max:255'],
             'email' => ['required_if:external,false', 'nullable', 'email', 'max:255', 'unique:users'],
             'password' => ['required_if:external,false', 'nullable', 'min:6'],
-            'login' => ['required_if:external,false', 'nullable', 'max:255', 'unique:users'],
             'department' => ['required_if:external,false', 'nullable', 'max:255'],
             'external' => ['sometimes', 'boolean'],
             'avatar' => ['sometimes', 'image'],

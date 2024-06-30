@@ -1820,12 +1820,6 @@
                         "minLength": 6,
                         "nullable": true
                     },
-                    "login": {
-                        "description": "Логин пользователя",
-                        "type": "string",
-                        "maxLength": 255,
-                        "nullable": true
-                    },
                     "department": {
                         "description": "Отдел пользователя",
                         "type": "string",
@@ -2050,10 +2044,6 @@
                         "description": "Электронная почта пользователя",
                         "type": "string",
                         "format": "email"
-                    },
-                    "login": {
-                        "description": "Логин пользователя",
-                        "type": "string"
                     },
                     "role": {
                         "description": "Роль пользователя",
