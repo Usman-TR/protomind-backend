@@ -1,19 +1,20 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests\ChangePassword;
 
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * @OA\Schema(
- *     schema="SendLinkChangePasswordRequest",
+ *     schema="ChangePasswordCheckTokenRequest",
  *     type="object",
- *     required={"email"},
- *     @OA\Property(property="email", type="string", format="email", example="user@example.com")
+ *     required={"email", "token"},
+ *     @OA\Property(property="email", type="string", format="email", example="user@example.com"),
+ *     @OA\Property(property="token", type="string", example="some-reset-token")
  * )
  */
 
-class SendLinkChangePasswordRequest extends FormRequest
+class CheckTokenRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -31,7 +32,8 @@ class SendLinkChangePasswordRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "email" => ["required", "string", "email", "exists:users,email"]
+            'email' => ['required', 'string', 'email', 'exists:users,email'],
+            'token' => ['required', 'string'],
         ];
     }
 }

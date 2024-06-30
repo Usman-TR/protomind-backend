@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ProtocolController;
 use App\Http\Controllers\Api\ProtocolDocumentController;
 use App\Http\Controllers\Api\ProtocolMemberController;
 use App\Http\Controllers\Api\ProtocolTaskController;
+use App\Http\Controllers\Api\ChangePasswordController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\VerificationController;
 use Illuminate\Support\Facades\Route;
@@ -21,6 +22,13 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+Route::prefix('change-password')->controller(ChangePasswordController::class)->group(function () {
+    Route::post('reset', 'reset');
+    Route::post('check-token', 'checkToken');
+    Route::post('send-link', 'sendResetLinkEmail');
+});
+
 
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');

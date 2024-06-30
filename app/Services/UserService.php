@@ -4,12 +4,14 @@ namespace App\Services;
 
 use App\Enums\RolesEnum;
 use App\Http\Filters\UserFilter;
+use App\Mail\ConfirmEmailMail;
 use App\Models\ManagerSecretary;
 use App\Models\User;
 use Exception;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 use Spatie\Permission\Models\Role;
 
@@ -60,6 +62,8 @@ class UserService
         }
 
         if ($user->hasRole([RolesEnum::ADMIN->value, RolesEnum::MANAGER->value])) {
+            $originalPassword = $data['password'];
+
             $data['password'] = Hash::make($data['password']);
             $newUser = User::create($data);
 
@@ -79,6 +83,8 @@ class UserService
             if(isset($data['avatar']) && $data['avatar']) {
                 $newUser->addMedia($data['avatar'])->toMediaCollection('avatar');
             }
+
+            Mail::to($user->email)->send(new ConfirmEmailMail($user->email, $originalPassword));
 
             return $newUser->assignRole($role->name);
         }

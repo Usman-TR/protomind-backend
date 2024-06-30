@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Http\Filters\Traits\Filterable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -81,7 +81,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * )
  */
 
-class User extends Authenticatable implements JWTSubject, HasMedia, MustVerifyEmail
+class User extends Authenticatable implements JWTSubject, HasMedia, CanResetPassword
 {
     use HasApiTokens,
         HasFactory,

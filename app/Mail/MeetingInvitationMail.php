@@ -2,37 +2,48 @@
 
 namespace App\Mail;
 
+use App\Models\Meeting;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class SendLinkChangePasswordMail extends Mailable
+class MeetingInvitationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    /**
+     * Create a new message instance.
+     */
     public function __construct(
-        private readonly string $url
+        private readonly Meeting $meeting
     )
     {
+        //
     }
 
+    /**
+     * Get the message envelope.
+     */
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Protomind: Сброс пароля',
+            subject: 'Protomind: Приглашение на совещание',
         );
     }
 
+    /**
+     * Get the message content definition.
+     */
     public function content(): Content
     {
         return new Content(
-            view: 'email.send_link_change_password',
+            view: 'email.meeting_invitation',
             with: [
-                'url' => $this->url,
+                'meeting' => $this->meeting,
             ],
         );
     }
+
 }

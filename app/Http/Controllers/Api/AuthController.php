@@ -20,9 +20,6 @@ use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 class AuthController extends Controller
 {
 
-    public function __construct(private readonly AuthService $authService)
-    {
-    }
 
     /**
      * @OA\Post(
@@ -192,89 +189,5 @@ class AuthController extends Controller
         return ResponseService::success(
             UserResource::make($user)
         );
-    }
-
-    /**
-     * @OA\Post(
-     *     path="/api/change-password/send-link",
-     *     operationId="sendLinkChangePassword",
-     *     tags={"Auth"},
-     *     description="Метод для отправки письма со ссылкой на смену пароля",
-     *     summary="Метод для отправки письма со ссылкой на смену пароля",
-     *
-     *     @OA\RequestBody(
-     *       @OA\MediaType(
-     *           mediaType="application/json",
-     *           @OA\Schema(
-     *              @OA\Property(property="email",type="string",example="example@242_test.com"),
-     *           ),
-     *       ),
-     *     ),
-     *     @OA\Response(response="200",
-     *          description="Ссылка на смену пароля отправлена на почту",
-     *      ),
-     *      @OA\Response(response="404",
-     *          description="Пользователь с таким email не существует",
-     *      )
-     * )
-     *
-     * @param SendLinkChangePasswordRequest $request
-     * @return JsonResponse
-     */
-    public function sendLinkChangePassword(SendLinkChangePasswordRequest $request): JsonResponse
-    {
-        $validated = $request->validated();
-        $this->authService->sendLinkChangePassword($validated["email"]);
-
-        return ResponseService::success(message: "Ссылка на смену пароля отправлена на почту");
-    }
-
-    /**
-     * @OA\Post(
-     *     path="/api/change-password/change",
-     *     operationId="changePassword",
-     *     tags={"Auth"},
-     *     description="Метод для смены пароля",
-     *     summary="Метод для смены пароля",
-     *     @OA\RequestBody(
-     *       @OA\MediaType(
-     *           mediaType="application/json",
-     *           @OA\Schema(
-     *              @OA\Property(property="email",type="string",example="example@242_test.com"),
-     *              @OA\Property(property="code",type="string",example="JIG4uMkrwX5FfcK6vIBFq29wvLojKobszO1QHXcjcMlSVw6HIduGR7mlDMB6nkAB"),
-     *              @OA\Property(property="password",type="string",example="newPassword"),
-     *           ),
-     *       ),
-     *     ),
-     *     @OA\Response(response="200",
-     *          description="Пароль успешно обновлён!",
-     *      ),
-     *      @OA\Response(response="404",
-     *          description="Пользователь с таким email не существует",
-     *      ),
-     *      @OA\Response(response="400",
-     *          description="Неправильный код подтверждения"),
-     *      ),
-     * @OA\Response(response="400",
-     *          description="Время кода подтверждения истекло"),
-     *      ),
-     * )
-     *
-     * @param ChangePasswordRequest $request
-     * @return JsonResponse
-     */
-    public function changePassword(ChangePasswordRequest $request): JsonResponse
-    {
-        try {
-            $this->authService->changePassword($request->validated());
-
-            return ResponseService::success(message: "Пароль успешно обновлён!");
-        } catch (NotFoundHttpException $e) {
-            return ResponseService::notFound(message: "Пользователь с таким email не существует");
-        } catch (BadRequestHttpException $e) {
-            return ResponseService::badRequest(message: "Неправильный код подтверждения");
-        } catch (TokenExpiredException $e) {
-            return ResponseService::badRequest(message: "Время кода подтверждения истекло");
-        }
     }
 }

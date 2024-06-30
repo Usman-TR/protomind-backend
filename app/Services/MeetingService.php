@@ -4,16 +4,15 @@ namespace App\Services;
 
 use App\Models\Meeting;
 use App\Models\MeetingMember;
+use App\Models\User;
 use App\Notifications\SendMeetingNotification;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Notification;
 
 class MeetingService
 {
-    public function sendNotification(Meeting $meeting, string $email): void
+    public function sendNotification(Meeting $meeting, User $user): void
     {
-        Notification::route('mail', $email)
-            ->notify(new SendMeetingNotification($meeting));
+        $user->notify(new SendMeetingNotification($meeting));
     }
 
     public function create(array $data): Meeting
@@ -31,13 +30,15 @@ class MeetingService
 
             if(isset($data['members'])) {
                 foreach($data['members'] as $member) {
-                    MeetingMember::create([
+                    $meetingMember = MeetingMember::create([
                         'meeting_id' => $meeting->id,
                         'member_id' => $member['member_id'],
                         'email_sent' => $member['should_notify'],
                         'updated_at' => $currentTime,
                         'created_at' => $currentTime,
                     ]);
+
+                    $this->sendNotification($meeting, $meetingMember->member);
                 }
             }
 
@@ -79,11 +80,13 @@ class MeetingService
                         ]);
                     }
                 } else {
-                    MeetingMember::create([
+                    $meetingMember = MeetingMember::create([
                         'meeting_id' => $meeting->id,
                         'email_sent' => $memberData['should_notify'],
                         'member_id' => $memberData['member_id'],
                     ]);
+
+                    $this->sendNotification($meeting, $meetingMember->member);
                 }
             }
         }

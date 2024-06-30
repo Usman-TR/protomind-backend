@@ -1,10 +1,9 @@
-<!-- resources/views/email/reset_password.blade.php -->
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Сброс пароля</title>
+    <title>Приглашение на совещание</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -61,21 +60,26 @@
 <table class="container" cellpadding="0" cellspacing="0" width="100%">
     <tr>
         <td class="header">
-            <h1>Сброс пароля</h1>
+            <h1>Приглашение на совещание</h1>
         </td>
     </tr>
     <tr>
         <td class="content">
             <p>Здравствуйте,</p>
-            <p>Вы запросили сброс пароля для вашей учетной записи. Нажмите на кнопку ниже, чтобы установить новый пароль:</p>
+            <p>Вы приглашены на совещание</p>
+            <p><strong>Тема:</strong> {{ $meeting->theme }}</p>
+            <p><strong>День проведения:</strong> {{ $meeting->event_date }}</p>
+            <p><strong>Начало совещания:</strong> {{ $meeting->event_start_time }}</p>
+            <p><strong>Конец совещания:</strong> {{ $meeting->event_end_time }}</p>
             <p style="text-align: center;">
-                <a href="{{ $url }}" class="button">Сбросить пароль</a>
+                <a href="{{ $meeting->link }}" class="button">Ссылка</a>
             </p>
-            <p>Если вы не запрашивали сброс пароля, просто проигнорируйте это письмо.</p>
+            <p>Благодарим вас за внимание!</p>
         </td>
     </tr>
     <tr>
         <td class="footer">
+            <p>С уважением, Protomind</p>
             <p>&copy; 2024 Protomind. Все права защищены.</p>
         </td>
     </tr>

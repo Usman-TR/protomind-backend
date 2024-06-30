@@ -157,79 +157,113 @@
                 ]
             }
         },
-        "/api/change-password/send-link": {
+        "/api/change-password/check-token": {
             "post": {
                 "tags": [
-                    "Auth"
+                    "ChangePassword"
                 ],
-                "summary": "Метод для отправки письма со ссылкой на смену пароля",
-                "description": "Метод для отправки письма со ссылкой на смену пароля",
-                "operationId": "sendLinkChangePassword",
+                "summary": "Проверяет существует ли токен по email и token",
+                "operationId": "f515ecb05af6268ec46d333ec46d14d9",
                 "requestBody": {
+                    "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "properties": {
-                                    "email": {
-                                        "type": "string",
-                                        "example": "example@242_test.com"
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/ChangePasswordCheckTokenRequest"
                             }
                         }
                     }
                 },
                 "responses": {
                     "200": {
-                        "description": "Ссылка на смену пароля отправлена на почту"
+                        "description": "Token is valid",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     },
                     "404": {
-                        "description": "Пользователь с таким email не существует"
+                        "description": "Token not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     }
                 }
             }
         },
-        "/api/change-password/change": {
+        "/api/change-password/send-link": {
             "post": {
                 "tags": [
-                    "Auth"
+                    "ChangePassword"
                 ],
-                "summary": "Метод для смены пароля",
-                "description": "Метод для смены пароля",
-                "operationId": "changePassword",
+                "summary": "Отправляет ссылку на почту",
+                "operationId": "2914bfa11f9a45e032dd8abda5a94127",
                 "requestBody": {
+                    "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "properties": {
-                                    "email": {
-                                        "type": "string",
-                                        "example": "example@242_test.com"
-                                    },
-                                    "code": {
-                                        "type": "string",
-                                        "example": "JIG4uMkrwX5FfcK6vIBFq29wvLojKobszO1QHXcjcMlSVw6HIduGR7mlDMB6nkAB"
-                                    },
-                                    "password": {
-                                        "type": "string",
-                                        "example": "newPassword"
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/SendLinkChangePasswordRequest"
                             }
                         }
                     }
                 },
                 "responses": {
                     "200": {
-                        "description": "Пароль успешно обновлён!"
-                    },
-                    "404": {
-                        "description": "Пользователь с таким email не существует"
+                        "description": "Reset link sent",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     },
                     "400": {
-                        "description": "Неправильный код подтверждения"
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/change-password/reset": {
+            "post": {
+                "tags": [
+                    "ChangePassword"
+                ],
+                "summary": "Меняет пароль",
+                "operationId": "9b5a2da8282ae35e01fc9e9710328aae",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ChangePasswordResetRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Password reset successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     }
                 }
             }
@@ -1489,6 +1523,67 @@
     },
     "components": {
         "schemas": {
+            "SendLinkChangePasswordRequest": {
+                "required": [
+                    "email"
+                ],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "user@example.com"
+                    }
+                },
+                "type": "object"
+            },
+            "ChangePasswordCheckTokenRequest": {
+                "required": [
+                    "email",
+                    "token"
+                ],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "user@example.com"
+                    },
+                    "token": {
+                        "type": "string",
+                        "example": "some-reset-token"
+                    }
+                },
+                "type": "object"
+            },
+            "ChangePasswordResetRequest": {
+                "required": [
+                    "token",
+                    "email",
+                    "password",
+                    "password_confirmation"
+                ],
+                "properties": {
+                    "token": {
+                        "type": "string",
+                        "example": "some-reset-token"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "user@example.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password",
+                        "example": "newpassword"
+                    },
+                    "password_confirmation": {
+                        "type": "string",
+                        "format": "password",
+                        "example": "newpassword"
+                    }
+                },
+                "type": "object"
+            },
             "KeywordStoreRequest": {
                 "title": "Запрос на создание ключевых слов",
                 "description": "Запрос, содержащий список ключевых слов для создания",
@@ -2347,11 +2442,6 @@
                     }
                 },
                 "type": "object"
-            }
-        },
-        "responses": {
-            "400": {
-                "description": "Время кода подтверждения истекло"
             }
         }
     }

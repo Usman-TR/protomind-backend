@@ -2,35 +2,29 @@
 
 namespace App\Notifications;
 
+use App\Mail\MeetingInvitationMail;
 use App\Models\Meeting;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 
-class SendMeetingNotification extends Notification
+class SendMeetingNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected Meeting $meeting;
-
-    public function __construct($meeting)
+    public function __construct(
+        private readonly Meeting $meeting
+    )
     {
-        $this->meeting = $meeting;
     }
 
-    public function via($notifiable)
+    public function via($notifiable): array
     {
         return ['mail'];
     }
 
-    public function toMail($notifiable)
+    public function toMail($notifiable): MeetingInvitationMail
     {
-        return (new MailMessage)
-            ->greeting('Здравствуйте!')
-            ->line('Вы приглашены на совещание')
-            ->line("Тема: {$this->meeting->theme}")
-            ->action('Ссылка', $this->meeting->link)
-            ->line('Благодарим вас за внимание!')
-            ->salutation('С уважением, Protomind');
+        return (new MeetingInvitationMail($this->meeting))->to($notifiable->email);
     }
 }

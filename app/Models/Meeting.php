@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Http\Filters\Traits\Filterable;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -80,6 +81,21 @@ class Meeting extends Model implements HasMedia
         'event_start_time',
         'event_end_time',
     ];
+
+    protected $casts = [
+        'event_start_time' => 'datetime:H:i',
+        'event_end_time' => 'datetime:H:i',
+    ];
+
+    public function getEventStartTimeAttribute($value): string
+    {
+        return Carbon::parse($value)->format('H:i');
+    }
+
+    public function getEventEndTimeAttribute($value): string
+    {
+        return Carbon::parse($value)->format('H:i');
+    }
 
     public function members(): HasMany
     {

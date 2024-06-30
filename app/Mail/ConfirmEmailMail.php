@@ -13,19 +13,13 @@ class ConfirmEmailMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public string $link;
-
-    /**
-     * Create a new message instance.
-     */
-    public function __construct(string $code, string $email)
+    public function __construct(
+        private readonly string $email,
+        private readonly string $password
+    )
     {
-        $this->link = config('app.client_create_password_url')."?code=".$code."&email=".$email;
     }
 
-    /**
-     * Get the message envelope.
-     */
     public function envelope(): Envelope
     {
         return new Envelope(
@@ -33,23 +27,14 @@ class ConfirmEmailMail extends Mailable
         );
     }
 
-    /**
-     * Get the message content definition.
-     */
     public function content(): Content
     {
         return new Content(
             view: 'email.confirm_email',
+            with: [
+                'email' => $this->email,
+                'password' => $this->password,
+            ],
         );
-    }
-
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-     */
-    public function attachments(): array
-    {
-        return [];
     }
 }
