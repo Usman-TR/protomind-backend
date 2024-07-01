@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources;
 
+use App\Enums\ProtocolStatusEnum;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
@@ -79,6 +81,16 @@ class UserResource extends JsonResource
             "department" => $this->department,
             "created_at" => $this->created_at,
             "updated_at" => $this->updated_at,
+            "stats" => [
+                "protocols" => [
+                    "in_process" => $this->protocols()->where('status', ProtocolStatusEnum::PROCESS->value)->count(),
+                    "success" => $this->protocols()->where('status', ProtocolStatusEnum::SUCCESS->value)->count(),
+                ],
+                "meetings" => [
+                    "in_process" => $this->meetings()->whereDate('event_date', '>=', Carbon::now()->startOfDay())->count(),
+                    "success" => $this->meetings()->whereDate('event_date', '<', Carbon::now()->startOfDay())->count(),
+                ],
+            ],
         ];
     }
 }
