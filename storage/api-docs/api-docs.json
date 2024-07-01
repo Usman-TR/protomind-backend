@@ -2163,6 +2163,37 @@
                         "type": "string",
                         "format": "binary",
                         "nullable": true
+                    },
+                    "stats": {
+                        "properties": {
+                            "protocols": {
+                                "properties": {
+                                    "in_process": {
+                                        "description": "Количество протоколов в процессе",
+                                        "type": "integer"
+                                    },
+                                    "success": {
+                                        "description": "Количество успешных протоколов",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "meetings": {
+                                "properties": {
+                                    "in_process": {
+                                        "description": "Количество встреч в процессе",
+                                        "type": "integer"
+                                    },
+                                    "success": {
+                                        "description": "Количество успешных встреч",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "type": "object"
                     }
                 },
                 "type": "object"

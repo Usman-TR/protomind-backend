@@ -59,7 +59,39 @@ use Illuminate\Support\Facades\Storage;
  *           format="binary",
  *           nullable=true,
  *           description="Avatar image of the user"
- *       )
+ *       ),
+ *     @OA\Property(
+ *          property="stats",
+ *          type="object",
+ *          @OA\Property(
+ *              property="protocols",
+ *              type="object",
+ *              @OA\Property(
+ *                  property="in_process",
+ *                  type="integer",
+ *                  description="Количество протоколов в процессе"
+ *              ),
+ *              @OA\Property(
+ *                  property="success",
+ *                  type="integer",
+ *                  description="Количество успешных протоколов"
+ *              ),
+ *          ),
+ *          @OA\Property(
+ *              property="meetings",
+ *              type="object",
+ *              @OA\Property(
+ *                  property="in_process",
+ *                  type="integer",
+ *                  description="Количество встреч в процессе"
+ *              ),
+ *              @OA\Property(
+ *                  property="success",
+ *                  type="integer",
+ *                  description="Количество успешных встреч"
+ *              ),
+ *          ),
+ *      )
  * )
  */
 
