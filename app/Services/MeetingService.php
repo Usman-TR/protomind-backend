@@ -78,6 +78,8 @@ class MeetingService
                         $member->update([
                             'email_sent' => $memberData['should_notify'],
                         ]);
+
+                        $this->sendNotification($meeting, $member->member);
                     }
                 } else {
                     $meetingMember = MeetingMember::create([

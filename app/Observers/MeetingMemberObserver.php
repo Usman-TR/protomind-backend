@@ -20,7 +20,7 @@ class MeetingMemberObserver
     public function created(MeetingMember $meetingMember): void
     {
         if($meetingMember->email_sent) {
-            $this->meetingService->sendNotification($meetingMember->meeting, $meetingMember->member->email);
+            $this->meetingService->sendNotification($meetingMember->meeting, $meetingMember->member);
         }
     }
 
@@ -32,7 +32,7 @@ class MeetingMemberObserver
         $originalData = $meetingMember->getOriginal();
 
         if(!$originalData['email_sent'] && $meetingMember->email_sent) {
-            $this->meetingService->sendNotification($meetingMember->meeting, $meetingMember->member->email);
+            $this->meetingService->sendNotification($meetingMember->meeting, $meetingMember->member);
         }
 
     }
