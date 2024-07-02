@@ -11,6 +11,7 @@ use App\Models\Protocol;
 use App\Services\ProtocolService;
 use App\Services\ResponseService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class ProtocolController extends Controller
 {
@@ -43,14 +44,16 @@ class ProtocolController extends Controller
      * )
      */
 
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $protocols = auth()->user()->protocols->sortBy(function ($protocol) {
-            return $protocol->status->value === ProtocolStatusEnum::PROCESS->value ? 0 : 1;
-        })->values()->all();
+        $limit = $request->query('limit', config('constants.paginator.limit'));
+
+        $protocols = auth()->user()->protocols()
+            ->orderByRaw("CASE WHEN status = ? THEN 0 ELSE 1 END", [ProtocolStatusEnum::PROCESS->value])
+            ->paginate($limit);
 
         return ResponseService::success(
-            ProtocolResource::collection($protocols)
+            ProtocolResource::collection($protocols)->response()->getData(true),
         );
     }
 

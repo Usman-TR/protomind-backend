@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\ProtocolDocumentController;
 use App\Http\Controllers\Api\ProtocolMemberController;
 use App\Http\Controllers\Api\ProtocolTaskController;
 use App\Http\Controllers\Api\ChangePasswordController;
+use App\Http\Controllers\Api\StatController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\VerificationController;
 use Illuminate\Support\Facades\Route;
@@ -45,6 +46,8 @@ Route::controller(AuthController::class)->group(function () {
 Route::group(["middleware" => "auth:api"], function() {
     Route::apiResource('users', UserController::class)->except('destroy');
 
+    Route::get('secretary/protocol-tasks', [ProtocolTaskController::class, 'getAllSecretaryTasks']);
+
     Route::apiResource('protocols', ProtocolController::class);
     Route::apiResource('protocols/{id}/members', ProtocolMemberController::class)->except('destroy', 'update');
     Route::delete('protocols/members/{id}', [ProtocolMemberController::class, 'destroy']);
@@ -63,4 +66,6 @@ Route::group(["middleware" => "auth:api"], function() {
     });
 
     Route::apiResource('meetings', MeetingController::class);
+
+    Route::get('stats/manager/all', [StatController::class, 'getManagerEntitiesStat']);
 });

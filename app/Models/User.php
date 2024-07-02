@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -158,5 +159,10 @@ class User extends Authenticatable implements JWTSubject, HasMedia, CanResetPass
     public function protocols(): HasMany
     {
         return $this->hasMany(Protocol::class, 'secretary_id');
+    }
+
+    public function protocolTasks(): HasManyThrough
+    {
+        return $this->hasManyThrough(ProtocolTask::class, Protocol::class, 'secretary_id', 'protocol_id');
     }
 }

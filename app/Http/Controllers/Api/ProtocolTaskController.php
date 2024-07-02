@@ -11,9 +11,57 @@ use App\Models\Protocol;
 use App\Models\ProtocolTask;
 use App\Services\ResponseService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class ProtocolTaskController extends Controller
 {
+
+    /**
+     * @OA\Get(
+     *     path="/api/secretary/protocol-tasks",
+     *     summary="Get all tasks for the secretary",
+     *     tags={"Secretary"},
+     *     @OA\Parameter(
+     *         name="limit",
+     *         in="query",
+     *         description="Number of tasks per page",
+     *         required=false,
+     *         @OA\Schema(type="integer", default=15)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful response",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 @OA\Items(ref="#/components/schemas/ProtocolTaskResource")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthenticated",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Unauthenticated.")
+     *         )
+     *     )
+     * )
+     */
+    public function getAllSecretaryTasks(Request $request): JsonResponse
+    {
+        $limit = $request->query('limit', config('constants.paginator.limit'));
+
+        $tasks = auth()->user()->protocolTasks()->paginate($limit);
+
+        return ResponseService::success(
+            ProtocolTaskResource::collection($tasks)->response()->getData(true)
+        );
+    }
+
+
     /**
      * @OA\Post(
      *     path="/api/protocols/{protocolId}/tasks",
@@ -126,4 +174,5 @@ class ProtocolTaskController extends Controller
             ProtocolTaskResource::make($task)
         );
     }
+
 }

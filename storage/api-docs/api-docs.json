@@ -1174,6 +1174,63 @@
                 }
             }
         },
+        "/api/secretary/protocol-tasks": {
+            "get": {
+                "tags": [
+                    "Secretary"
+                ],
+                "summary": "Get all tasks for the secretary",
+                "operationId": "87e70631f4b22840a4674a4b787d4c42",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Number of tasks per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 15
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/ProtocolTaskResource"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/protocols/{protocolId}/tasks": {
             "post": {
                 "tags": [
@@ -1291,6 +1348,93 @@
                                         "message": {
                                             "type": "string",
                                             "example": "Задача не найдена."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/manager/entities-stat": {
+            "get": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "Get manager entities statistics",
+                "operationId": "d02a4762d0de0425245d7ee8cf487cf2",
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "protocols": {
+                                                    "properties": {
+                                                        "in_process": {
+                                                            "type": "integer",
+                                                            "example": 5
+                                                        },
+                                                        "success": {
+                                                            "type": "integer",
+                                                            "example": 10
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "meetings": {
+                                                    "properties": {
+                                                        "in_process": {
+                                                            "type": "integer",
+                                                            "example": 3
+                                                        },
+                                                        "success": {
+                                                            "type": "integer",
+                                                            "example": 7
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "tasks": {
+                                                    "properties": {
+                                                        "success": {
+                                                            "type": "integer",
+                                                            "example": 8
+                                                        },
+                                                        "expired": {
+                                                            "type": "integer",
+                                                            "example": 2
+                                                        },
+                                                        "process": {
+                                                            "type": "integer",
+                                                            "example": 6
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Bad request."
                                         }
                                     },
                                     "type": "object"
