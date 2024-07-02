@@ -19,7 +19,7 @@ class StatController extends Controller
      * @OA\Get(
      *     path="/api/manager/all",
      *     summary="Get manager entities statistics",
-     *     tags={"Manager"},
+     *     tags={"Stats"},
      *     @OA\Response(
      *         response=200,
      *         description="Successful response",

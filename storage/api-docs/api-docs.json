@@ -1358,13 +1358,13 @@
                 }
             }
         },
-        "/api/manager/entities-stat": {
+        "/api/manager/all": {
             "get": {
                 "tags": [
-                    "Manager"
+                    "Stats"
                 ],
                 "summary": "Get manager entities statistics",
-                "operationId": "d02a4762d0de0425245d7ee8cf487cf2",
+                "operationId": "e9d0799d73071b6a7309687be3c547fc",
                 "responses": {
                     "200": {
                         "description": "Successful response",
