@@ -14,7 +14,9 @@ class ProtocolService
 {
     public function create(array $data): Protocol
     {
-        $data['status'] = ProtocolStatusEnum::PROCESS;
+        $data['status'] = ProtocolStatusEnum::PROCESS->value;
+        $data['creator_id'] = auth()->id();
+
         $protocol = Protocol::create($data);
 
         $protocol->addMedia($data['video'])->toMediaCollection('video');
@@ -63,44 +65,8 @@ class ProtocolService
         $protocol->update($data);
     }
 
-    public function saveFinalTranscript(Protocol $protocol): void
+    public function getFinalTranscript(Protocol $protocol): void
     {
-        $finalTranscript = $this->extractSectionsByKeywords($protocol->transcript);
 
-        $protocol->update([
-           'final_transcript' => $finalTranscript
-        ]);
-    }
-
-    private function extractSectionsByKeywords($text): string
-    {
-        $text = strtolower(trim($text));
-
-        $keywords = array_map('strtolower', Keyword::all()->pluck('phrase')->toArray());
-        $keywordSet = array_flip($keywords);
-
-        $words = explode(' ', $text);
-
-        $sections = [];
-        $currentSection = '';
-        $writing = false;
-
-        foreach ($words as $word) {
-            $trimmedWord = trim($word);
-
-            if (isset($keywordSet[$trimmedWord])) {
-                if ($currentSection !== '') {
-                    $sections[] = trim($currentSection);
-                }
-                $currentSection = '';
-                $writing = true;
-            }
-
-            if ($writing) {
-                $currentSection .= ' ' . $trimmedWord;
-            }
-        }
-
-        return implode(' ', $sections);
     }
 }

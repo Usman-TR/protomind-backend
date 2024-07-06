@@ -2,6 +2,6 @@
 
 return [
     'paginator' => [
-        'limit' => 30
+        'limit' => 10
     ]
 ];

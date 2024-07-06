@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Enums\ProtocolStatusEnum;
+use App\Enums\RolesEnum;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -104,7 +105,7 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $res = [
             "id" => $this->id,
             "full_name" => $this->full_name,
             "email" => $this->email,
@@ -113,16 +114,12 @@ class UserResource extends JsonResource
             "department" => $this->department,
             "created_at" => $this->created_at,
             "updated_at" => $this->updated_at,
-            "stats" => [
-                "protocols" => [
-                    "in_process" => $this->protocols()->where('status', ProtocolStatusEnum::PROCESS->value)->count(),
-                    "success" => $this->protocols()->where('status', ProtocolStatusEnum::SUCCESS->value)->count(),
-                ],
-                "meetings" => [
-                    "in_process" => $this->meetings()->whereDate('event_date', '>=', Carbon::now()->startOfDay())->count(),
-                    "success" => $this->meetings()->whereDate('event_date', '<', Carbon::now()->startOfDay())->count(),
-                ],
-            ],
         ];
+
+        if(auth()->user()->hasRole([RolesEnum::MANAGER->value, RolesEnum::ADMIN->value])) {
+            $res['is_active'] = $this->is_active;
+        }
+
+        return $res;
     }
 }

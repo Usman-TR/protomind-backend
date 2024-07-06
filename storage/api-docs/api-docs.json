@@ -1174,13 +1174,13 @@
                 }
             }
         },
-        "/api/secretary/protocol-tasks": {
+        "/api/protocols/tasks": {
             "get": {
                 "tags": [
-                    "Secretary"
+                    "ProtocolTasks"
                 ],
                 "summary": "Get all tasks for the secretary",
-                "operationId": "87e70631f4b22840a4674a4b787d4c42",
+                "operationId": "getAllSecretaryTasks",
                 "parameters": [
                     {
                         "name": "limit",
@@ -1300,15 +1300,6 @@
                 "operationId": "updateProtocolTask",
                 "parameters": [
                     {
-                        "name": "protocolId",
-                        "in": "path",
-                        "description": "ID протокола",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
                         "name": "taskId",
                         "in": "path",
                         "description": "ID задачи",
@@ -1335,6 +1326,61 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ProtocolTaskResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Задача не найдена",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Задача не найдена."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/protocols/tasks/{taskId}": {
+            "delete": {
+                "tags": [
+                    "ProtocolTasks"
+                ],
+                "summary": "Удалить задачу из протокола",
+                "description": "Метод для удаления задачи из протокола",
+                "operationId": "deleteProtocolTask",
+                "parameters": [
+                    {
+                        "name": "taskId",
+                        "in": "path",
+                        "description": "ID задачи",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешная операция",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Задача успешно удалена."
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -1441,6 +1487,201 @@
                                 }
                             }
                         }
+                    }
+                }
+            }
+        },
+        "/api/secretary/meetings": {
+            "get": {
+                "tags": [
+                    "Stats"
+                ],
+                "summary": "Get Secretary Meetings Statistics",
+                "description": "Returns a list of meetings for the authenticated secretary.",
+                "operationId": "b09f40e617ddd0ac0e737bf668a09f51",
+                "parameters": [
+                    {
+                        "name": "start_date_at",
+                        "in": "query",
+                        "description": "Start date for filtering meetings.",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "end_date_at",
+                        "in": "query",
+                        "description": "End date for filtering meetings.",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "event_date": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2024-07-06T12:00:00Z"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/api/secretary/{id}/entities": {
+            "get": {
+                "tags": [
+                    "Stats"
+                ],
+                "summary": "Get Secretary Entities Statistics",
+                "description": "Returns statistics for a specific secretary.",
+                "operationId": "72cbb1d3e6d45c6a5b7b1b227f5fca83",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Secretary ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "protocols": {
+                                            "properties": {
+                                                "in_process": {
+                                                    "type": "integer",
+                                                    "example": 5
+                                                },
+                                                "success": {
+                                                    "type": "integer",
+                                                    "example": 10
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "meetings": {
+                                            "properties": {
+                                                "in_process": {
+                                                    "type": "integer",
+                                                    "example": 3
+                                                },
+                                                "success": {
+                                                    "type": "integer",
+                                                    "example": 7
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/api/secretary/{id}/tasks": {
+            "get": {
+                "tags": [
+                    "Stats"
+                ],
+                "summary": "Get Secretary Tasks Statistics",
+                "description": "Returns tasks statistics for a specific secretary.",
+                "operationId": "2110d29c047fb6c8fd0c3902171de3c0",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Secretary ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "description": "Filter tasks by date",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "week": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "in_process": {
+                                                "type": "integer",
+                                                "example": 5
+                                            },
+                                            "success": {
+                                                "type": "integer",
+                                                "example": 10
+                                            },
+                                            "expired": {
+                                                "type": "integer",
+                                                "example": 2
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
                 }
             }

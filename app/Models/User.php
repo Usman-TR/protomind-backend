@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Http\Filters\Traits\Filterable;
+use App\Scopes\UserScope;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -126,6 +127,13 @@ class User extends Authenticatable implements JWTSubject, HasMedia, CanResetPass
         'email_verified_at' => 'datetime',
     ];
 
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        self::addGlobalScope(new UserScope());
+    }
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
@@ -158,7 +166,7 @@ class User extends Authenticatable implements JWTSubject, HasMedia, CanResetPass
 
     public function protocols(): HasMany
     {
-        return $this->hasMany(Protocol::class, 'secretary_id');
+        return $this->hasMany(Protocol::class, 'creator_id');
     }
 
     public function protocolTasks(): HasManyThrough

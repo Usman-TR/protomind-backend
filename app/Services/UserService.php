@@ -7,6 +7,8 @@ use App\Http\Filters\UserFilter;
 use App\Mail\ConfirmEmailMail;
 use App\Models\ManagerSecretary;
 use App\Models\User;
+use App\Notifications\ConfirmEmailNotification;
+use App\Scopes\UserScope;
 use Exception;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -36,9 +38,15 @@ class UserService
         }
 
         if($user->hasRole(RolesEnum::MANAGER->value)) {
-            $secretaryIds = $user->secretaries()->pluck('secretary_id')->toArray();
+            $secretaryQuery = $user->secretaries();
 
-            $query = $query->whereIn('id', $secretaryIds);
+            if (isset($data['with_blocked']) && filter_var($data['with_blocked'], FILTER_VALIDATE_BOOLEAN)) {
+                $secretaryQuery->withoutGlobalScope(UserScope::class);
+            }
+
+            $secretaryIds = $secretaryQuery->pluck('secretary_id')->toArray();
+
+            $query->whereIn('id', $secretaryIds);
         }
 
         if($user->hasRole(RolesEnum::ADMIN->value)) {
@@ -84,7 +92,7 @@ class UserService
                 $newUser->addMedia($data['avatar'])->toMediaCollection('avatar');
             }
 
-            Mail::to($user->email)->send(new ConfirmEmailMail($user->email, $originalPassword));
+            $newUser->notify(new ConfirmEmailNotification($originalPassword));
 
             return $newUser->assignRole($role->name);
         }

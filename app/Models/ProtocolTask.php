@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\ProtocolTaskStatusEnum;
+use App\Http\Filters\Traits\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -61,7 +62,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class ProtocolTask extends Model
 {
-    use HasFactory;
+    use HasFactory, Filterable;
 
     protected $fillable = [
         'protocol_id',

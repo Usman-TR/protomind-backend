@@ -77,10 +77,10 @@ class Protocol extends Model implements HasMedia
         'event_date',
         'secretary_id',
         'director_id',
+        'creator_id',
         'status',
         'stage',
         'transcript',
-        'final_transcript',
     ];
 
     protected $casts = [

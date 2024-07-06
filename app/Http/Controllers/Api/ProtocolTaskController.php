@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Enums\ProtocolTaskStatusEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Filters\ProtocolTaskFilter;
 use App\Http\Requests\ProtocolTask\StoreRequest;
 use App\Http\Requests\ProtocolTask\UpdateRequest;
 use App\Http\Resources\ProtocolTaskResource;
+use App\Jobs\UpdateProtocolTaskStatusJob;
 use App\Models\Protocol;
 use App\Models\ProtocolTask;
+use App\Services\ProtocolTaskService;
 use App\Services\ResponseService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -16,11 +19,18 @@ use Illuminate\Http\Request;
 class ProtocolTaskController extends Controller
 {
 
+    public function __construct(
+        private readonly ProtocolTaskService $service,
+    )
+    {
+    }
+
     /**
      * @OA\Get(
-     *     path="/api/secretary/protocol-tasks",
+     *     path="/api/protocols/tasks",
+     *     operationId="getAllSecretaryTasks",
      *     summary="Get all tasks for the secretary",
-     *     tags={"Secretary"},
+     *     tags={"ProtocolTasks"},
      *     @OA\Parameter(
      *         name="limit",
      *         in="query",
@@ -50,17 +60,24 @@ class ProtocolTaskController extends Controller
      *     )
      * )
      */
-    public function getAllSecretaryTasks(Request $request): JsonResponse
+    public function index(Request $request, ProtocolTaskFilter $filter): JsonResponse
     {
         $limit = $request->query('limit', config('constants.paginator.limit'));
 
-        $tasks = auth()->user()->protocolTasks()->paginate($limit);
+        $tasks = auth()->user()->protocolTasks()
+            ->filter($filter)
+            ->orderByRaw("CASE
+                WHEN protocol_tasks.status = 'expired' THEN 1
+                WHEN protocol_tasks.status = 'process' THEN 2
+                WHEN protocol_tasks.status = 'success' THEN 3
+                ELSE 4 END"
+            )
+            ->paginate($limit);
 
         return ResponseService::success(
             ProtocolTaskResource::collection($tasks)->response()->getData(true)
         );
     }
-
 
     /**
      * @OA\Post(
@@ -108,9 +125,8 @@ class ProtocolTaskController extends Controller
 
         $validated = $request->validated();
         $validated['protocol_id'] = $protocolId;
-        $validated['status'] = ProtocolTaskStatusEnum::PROCESS;
 
-        $task = ProtocolTask::create($validated);
+        $task = $this->service->create($validated);
 
         return ResponseService::success(
             ProtocolTaskResource::make($task)
@@ -124,13 +140,6 @@ class ProtocolTaskController extends Controller
      *     tags={"ProtocolTasks"},
      *     summary="Обновить задачу в протоколе",
      *     description="Метод для обновления задачи в протоколе",
-     *     @OA\Parameter(
-     *         name="protocolId",
-     *         in="path",
-     *         required=true,
-     *         description="ID протокола",
-     *         @OA\Schema(type="string")
-     *     ),
      *     @OA\Parameter(
      *         name="taskId",
      *         in="path",
@@ -173,6 +182,57 @@ class ProtocolTaskController extends Controller
         return ResponseService::success(
             ProtocolTaskResource::make($task)
         );
+    }
+
+    /**
+     * @OA\Delete(
+     *     path="/api/protocols/tasks/{taskId}",
+     *     operationId="deleteProtocolTask",
+     *     tags={"ProtocolTasks"},
+     *     summary="Удалить задачу из протокола",
+     *     description="Метод для удаления задачи из протокола",
+     *     @OA\Parameter(
+     *         name="taskId",
+     *         in="path",
+     *         required=true,
+     *         description="ID задачи",
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Успешная операция",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 example="Задача успешно удалена."
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Задача не найдена",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 example="Задача не найдена."
+     *             )
+     *         )
+     *     )
+     * )
+     */
+    public function destroy(string $protocolId): JsonResponse
+    {
+        $task = ProtocolTask::find($protocolId);
+
+        if(!$task) {
+            return ResponseService::notFound(message: 'Задача не найдена.');
+        }
+
+        $task->delete();
+
+        return ResponseService::success();
     }
 
 }

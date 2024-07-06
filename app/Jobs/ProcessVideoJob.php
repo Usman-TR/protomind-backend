@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Enums\ProtocolStageEnum;
 use App\Events\VideoProcessedBroadcast;
+use App\Http\Resources\ProtocolResource;
 use App\Models\Protocol;
 use App\Services\ProtocolService;
 use Illuminate\Bus\Queueable;
@@ -45,8 +46,7 @@ class ProcessVideoJob implements ShouldQueue
                'transcript' => json_decode($response->body())->text,
             ]);
 
-            event(new VideoProcessedBroadcast($this->protocol));
-            app(ProtocolService::class)->saveFinalTranscript($this->protocol);
+            broadcast(new VideoProcessedBroadcast($this->protocol));
         } else {
             $this->protocol->update([
                 'stage' => ProtocolStageEnum::ERROR_VIDEO_PROCESS->value,

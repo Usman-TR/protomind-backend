@@ -46,14 +46,14 @@ Route::controller(AuthController::class)->group(function () {
 Route::group(["middleware" => "auth:api"], function() {
     Route::apiResource('users', UserController::class)->except('destroy');
 
-    Route::get('secretary/protocol-tasks', [ProtocolTaskController::class, 'getAllSecretaryTasks']);
+    Route::get('protocols/tasks', [ProtocolTaskController::class, 'index']);
+    Route::post('protocols/{id}/tasks', [ProtocolTaskController::class, 'store']);
+    Route::put('protocols/tasks/{id}', [ProtocolTaskController::class, 'update']);
+    Route::delete('protocols/tasks/{id}', [ProtocolTaskController::class, 'destroy']);
 
     Route::apiResource('protocols', ProtocolController::class);
     Route::apiResource('protocols/{id}/members', ProtocolMemberController::class)->except('destroy', 'update');
     Route::delete('protocols/members/{id}', [ProtocolMemberController::class, 'destroy']);
-
-    Route::post('protocols/{id}/tasks', [ProtocolTaskController::class, 'store']);
-    Route::put('protocols/tasks/{id}', [ProtocolTaskController::class, 'update']);
 
     Route::get('protocols/{id}/documents/docx', [ProtocolDocumentController::class, 'generateDocx']);
     Route::get('protocols/{id}/documents/pdf', [ProtocolDocumentController::class, 'generatePdf']);
@@ -67,5 +67,10 @@ Route::group(["middleware" => "auth:api"], function() {
 
     Route::apiResource('meetings', MeetingController::class);
 
+
     Route::get('stats/manager/all', [StatController::class, 'getManagerEntitiesStat']);
+
+    Route::get('stats/secretary/meetings', [StatController::class, 'getSecretaryMeetingsStat']);
+    Route::get('stats/secretary/{id}/entities', [StatController::class, 'getSecretaryEntitiesStat']);
+    Route::get('stats/secretary/{id}/tasks', [StatController::class, 'getSecretaryTasksStat']);
 });

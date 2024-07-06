@@ -31,7 +31,7 @@ class ProtocolResource extends JsonResource
             'agenda' => $this->agenda,
             'event_date' => $this->event_date,
             'stage' => $this->stage,
-            'status' => $this->status->label(),
+            'status' => $this->status->value,
             'director' => UserResource::make($this->director),
             'secretary' => UserResource::make($this->secretary),
             'transcript' => $this->transcript,

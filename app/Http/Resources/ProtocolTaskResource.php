@@ -53,7 +53,7 @@ class ProtocolTaskResource extends JsonResource
             'responsible' => UserResource::make($this->responsible),
             'essence' => $this->essence,
             'deadline' => $this->deadline,
-            'status' => $this->status->label(),
+            'status' => $this->status->value,
         ];
     }
 }

@@ -21,7 +21,7 @@ class VideoProcessedBroadcast implements ShouldBroadcast
         private readonly Protocol $protocol
     )
     {
-        //
+
     }
 
     /**
@@ -39,7 +39,7 @@ class VideoProcessedBroadcast implements ShouldBroadcast
     public function broadcastWith(): array
     {
         return [
-            'protocol' => ProtocolResource::make($this->protocol),
+            'protocol' => $this->protocol,
         ];
     }
 
