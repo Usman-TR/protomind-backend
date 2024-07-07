@@ -111,7 +111,7 @@ class StatController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/secretary/meetings",
+     *     path="/api/stats/secretary/meetings",
      *     summary="Get Secretary Meetings Statistics",
      *     description="Returns a list of meetings for the authenticated secretary.",
      *     tags={"Stats"},
@@ -158,7 +158,7 @@ class StatController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/secretary/{id}/entities",
+     *     path="/api/stats/secretary/{id}/entities",
      *     summary="Get Secretary Entities Statistics",
      *     description="Returns statistics for a specific secretary.",
      *     tags={"Stats"},
@@ -216,7 +216,7 @@ class StatController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/secretary/{id}/tasks",
+     *     path="/api/stats/secretary/{id}/tasks",
      *     summary="Get Secretary Tasks Statistics",
      *     description="Returns tasks statistics for a specific secretary.",
      *     tags={"Stats"},
@@ -252,7 +252,7 @@ class StatController extends Controller
      */
     public function getSecretaryTasksStat(string $id, TaskStatFilter $filter)
     {
-        $tasks = ProtocolTask::whereHas('protocol.secretary', function ($query) use ($id) {
+        $tasks = ProtocolTask::whereHas('protocol.creator', function ($query) use ($id) {
             $query->where('id', $id);
         })->filter($filter)->get();
 

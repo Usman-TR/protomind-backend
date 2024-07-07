@@ -30,7 +30,7 @@ class UpdateProtocolTaskStatusJob implements ShouldQueue
      */
     public function handle(): void
     {
-        if ($this->task->status !== ProtocolTaskStatusEnum::SUCCESS &&
+        if ($this->task->status !== ProtocolTaskStatusEnum::SUCCESS->value &&
             Carbon::parse($this->task->deadline) < Carbon::now()) {
             $this->task->update(['status' => ProtocolTaskStatusEnum::EXPIRED->value]);
         }

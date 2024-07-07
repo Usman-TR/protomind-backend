@@ -106,4 +106,9 @@ class Protocol extends Model implements HasMedia
     {
         return $this->belongsTo(User::class, 'director_id');
     }
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'creator_id');
+    }
 }

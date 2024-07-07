@@ -1491,14 +1491,14 @@
                 }
             }
         },
-        "/api/secretary/meetings": {
+        "/api/stats/secretary/meetings": {
             "get": {
                 "tags": [
                     "Stats"
                 ],
                 "summary": "Get Secretary Meetings Statistics",
                 "description": "Returns a list of meetings for the authenticated secretary.",
-                "operationId": "b09f40e617ddd0ac0e737bf668a09f51",
+                "operationId": "97a396c91e3f3888f6e41d5b6db48fba",
                 "parameters": [
                     {
                         "name": "start_date_at",
@@ -1552,14 +1552,14 @@
                 }
             }
         },
-        "/api/secretary/{id}/entities": {
+        "/api/stats/secretary/{id}/entities": {
             "get": {
                 "tags": [
                     "Stats"
                 ],
                 "summary": "Get Secretary Entities Statistics",
                 "description": "Returns statistics for a specific secretary.",
-                "operationId": "72cbb1d3e6d45c6a5b7b1b227f5fca83",
+                "operationId": "3bfdf5f4198215a773ac6b8f5b5b1383",
                 "parameters": [
                     {
                         "name": "id",
@@ -1619,14 +1619,14 @@
                 }
             }
         },
-        "/api/secretary/{id}/tasks": {
+        "/api/stats/secretary/{id}/tasks": {
             "get": {
                 "tags": [
                     "Stats"
                 ],
                 "summary": "Get Secretary Tasks Statistics",
                 "description": "Returns tasks statistics for a specific secretary.",
-                "operationId": "2110d29c047fb6c8fd0c3902171de3c0",
+                "operationId": "f702bcacdb631b25b87ad693554e1de8",
                 "parameters": [
                     {
                         "name": "id",
