@@ -262,9 +262,9 @@ class StatController extends Controller
         })->map(function ($group) {
             return [
                 'week' => $group->first()->created_at->weekOfMonth,
-                'in_process' => $group->where('status', ProtocolTaskStatusEnum::PROCESS->value)->count(),
-                'success' => $group->where('status', ProtocolTaskStatusEnum::SUCCESS->value)->count(),
-                'expired' => $group->where('status', ProtocolTaskStatusEnum::EXPIRED->value)->count(),
+                'in_process' => $group->where('status', ProtocolTaskStatusEnum::PROCESS)->count(),
+                'success' => $group->where('status', ProtocolTaskStatusEnum::SUCCESS)->count(),
+                'expired' => $group->where('status', ProtocolTaskStatusEnum::EXPIRED)->count(),
             ];
         })->sortBy('week')->values();
 
