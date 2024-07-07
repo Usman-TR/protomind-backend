@@ -171,6 +171,6 @@ class User extends Authenticatable implements JWTSubject, HasMedia, CanResetPass
 
     public function protocolTasks(): HasManyThrough
     {
-        return $this->hasManyThrough(ProtocolTask::class, Protocol::class, 'secretary_id', 'protocol_id');
+        return $this->hasManyThrough(ProtocolTask::class, Protocol::class, 'creator_id', 'protocol_id');
     }
 }
