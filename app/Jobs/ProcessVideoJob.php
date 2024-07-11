@@ -41,9 +41,13 @@ class ProcessVideoJob implements ShouldQueue
 
 
         if($response->successful()) {
+            $transcript = json_decode($response->body())->text;
+
+            $finalTranscript = app(ProtocolService::class)->getFinalTranscript($transcript, $this->protocol->creator_id);
             $this->protocol->update([
                'stage' => ProtocolStageEnum::SUCCESS_VIDEO_PROCESS->value,
-               'transcript' => json_decode($response->body())->text,
+               'final_transcript' => $finalTranscript ?? null,
+               'transcript' => $transcript ?? null,
             ]);
 
             broadcast(new VideoProcessedBroadcast($this->protocol));

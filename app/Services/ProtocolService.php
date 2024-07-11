@@ -7,6 +7,7 @@ use App\Enums\ProtocolStatusEnum;
 use App\Jobs\ProcessVideoJob;
 use App\Models\Keyword;
 use App\Models\Protocol;
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 
@@ -60,10 +61,9 @@ class ProtocolService
         $protocol->update($data);
     }
 
-    public function getFinalTranscript(string $text): array
+    public function getFinalTranscript(string $transcript, string $userId): array
     {
-        $keywords = auth()->user()->keywords;
-        $transcript = $text;
+        $keywords = User::find($userId)->keywords;
 
         $positions = [];
         $allKeywords = [];
