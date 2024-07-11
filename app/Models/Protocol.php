@@ -86,11 +86,17 @@ class Protocol extends Model implements HasMedia
         'status',
         'stage',
         'transcript',
+        'final_transcript',
         'user_protocol_number',
+        'location',
+        'city',
+        'event_start_time',
     ];
 
     protected $casts = [
         'status' => ProtocolStatusEnum::class,
+        'event_start_time' => 'datetime',
+        'event_date' => 'datetime',
     ];
 
     public function members(): HasMany

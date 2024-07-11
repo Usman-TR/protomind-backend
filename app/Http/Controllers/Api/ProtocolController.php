@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\ProtocolStageEnum;
 use App\Enums\ProtocolStatusEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Protocol\FinalRequest;
 use App\Http\Requests\Protocol\StoreRequest;
 use App\Http\Requests\Protocol\UpdateRequest;
 use App\Http\Resources\ProtocolResource;
@@ -248,5 +250,53 @@ class ProtocolController extends Controller
         $protocol->delete();
 
         return ResponseService::success();
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/protocols/{id}/final",
+     *     summary="Сохранить финальную версию протокола",
+     *     description="Сохраняет финальную версию протокола с указанным идентификатором.",
+     *     tags={"Protocols"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Идентификатор протокола",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/ProtocolFinalRequest")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Успешный ответ",
+     *         @OA\JsonContent(ref="#/components/schemas/ProtocolResource")
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Протокол не найден"
+     *     )
+     * )
+     */
+    public function saveFinalTranscript(string $id, FinalRequest $request): JsonResponse
+    {
+        $protocol = Protocol::find($id);
+
+        if(!$protocol) {
+            return ResponseService::notFound(message: 'Протокол не найден.');
+        }
+
+        $validated = $request->validated();
+        $validated['stage'] = ProtocolStageEnum::FINAL->value;
+
+        $protocol->update($validated);
+
+        return ResponseService::success(
+            ProtocolResource::make($protocol)
+        );
     }
 }

@@ -37,6 +37,9 @@ class ProtocolResource extends JsonResource
             'secretary' => UserResource::make($this->secretary),
             'transcript' => $this->transcript,
             'final_transcript' => $this->final_transcript,
+            'location' => $this->location,
+            'event_start_time' => $this->event_start_time,
+            'city' => $this->city,
             'video_path' => asset($this->getFirstMediaUrl('video')),
         ];
     }

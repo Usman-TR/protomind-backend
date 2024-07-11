@@ -251,7 +251,7 @@ class StatController extends Controller
      *     @OA\Response(response=401, description="Unauthorized")
      * )
      */
-    public function getSecretaryTasksStat(string $id, TaskStatFilter $filter)
+    public function getSecretaryTasksStat(string $id, TaskStatFilter $filter): JsonResponse
     {
         $tasks = ProtocolTaskStatusChange::where('user_id', $id)
             ->filter($filter)

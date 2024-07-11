@@ -910,6 +910,52 @@
                 }
             }
         },
+        "/protocols/{id}/final": {
+            "post": {
+                "tags": [
+                    "Protocols"
+                ],
+                "summary": "Сохранить финальную версию протокола",
+                "description": "Сохраняет финальную версию протокола с указанным идентификатором.",
+                "operationId": "702ad6c84070e5802898ec5b247471cf",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Идентификатор протокола",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProtocolFinalRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Успешный ответ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProtocolResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Протокол не найден"
+                    }
+                }
+            }
+        },
         "/api/protocols/{id}/documents/pdf": {
             "get": {
                 "tags": [
@@ -2183,6 +2229,41 @@
                         "description": "Статус задачи",
                         "type": "string",
                         "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "ProtocolFinalRequest": {
+                "required": [
+                    "final_transcript",
+                    "location",
+                    "city"
+                ],
+                "properties": {
+                    "final_transcript": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "key": {
+                                    "type": "string"
+                                },
+                                "value": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "location": {
+                        "type": "string"
+                    },
+                    "city": {
+                        "type": "string"
+                    },
+                    "event_start_time": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "14:30"
                     }
                 },
                 "type": "object"

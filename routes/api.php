@@ -10,7 +10,6 @@ use App\Http\Controllers\Api\ProtocolTaskController;
 use App\Http\Controllers\Api\ChangePasswordController;
 use App\Http\Controllers\Api\StatController;
 use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\VerificationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -51,12 +50,12 @@ Route::group(["middleware" => "auth:api"], function() {
     Route::put('protocols/tasks/{id}', [ProtocolTaskController::class, 'update']);
     Route::delete('protocols/tasks/{id}', [ProtocolTaskController::class, 'destroy']);
 
+    Route::post('protocols/{id}/final', [ProtocolController::class, 'saveFinalTranscript']);
     Route::apiResource('protocols', ProtocolController::class);
     Route::apiResource('protocols/{id}/members', ProtocolMemberController::class)->except('destroy', 'update');
     Route::delete('protocols/members/{id}', [ProtocolMemberController::class, 'destroy']);
 
-    Route::get('protocols/{id}/documents/docx', [ProtocolDocumentController::class, 'generateDocx']);
-    Route::get('protocols/{id}/documents/pdf', [ProtocolDocumentController::class, 'generatePdf']);
+
 
     Route::prefix('keywords')->controller(KeywordController::class)->group(function () {
         Route::get('/', 'index');
@@ -74,3 +73,5 @@ Route::group(["middleware" => "auth:api"], function() {
     Route::get('stats/secretary/{id}/entities', [StatController::class, 'getSecretaryEntitiesStat']);
     Route::get('stats/secretary/{id}/tasks', [StatController::class, 'getSecretaryTasksStat']);
 });
+Route::get('protocols/{id}/documents/docx', [ProtocolDocumentController::class, 'generateDocx']);
+Route::get('protocols/{id}/documents/pdf', [ProtocolDocumentController::class, 'generatePdf']);

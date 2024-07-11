@@ -17,7 +17,7 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
 
-Broadcast::channel('protomind.{userId}', function ($user, $userId) {
+Broadcast::channel('secretary_protocol.{userId}', function ($user, $userId) {
     return true;
 });
 

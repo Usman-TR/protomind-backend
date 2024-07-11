@@ -4,15 +4,19 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Protocol;
-use App\Services\ProtocolService;
+use App\Services\ProtocolDocumentService;
 use App\Services\ResponseService;
 use Barryvdh\DomPDF\Facade\Pdf;
-use PhpOffice\PhpWord\IOFactory;
-use PhpOffice\PhpWord\PhpWord;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProtocolDocumentController extends Controller
 {
+    public function __construct(
+        private readonly ProtocolDocumentService $service
+    )
+    {
+    }
+
     /**
      * @OA\Get(
      *     path="/api/protocols/{id}/documents/pdf",
@@ -58,9 +62,18 @@ class ProtocolDocumentController extends Controller
         }
 
         return Pdf::loadView('documents.generate-pdf',
-                ['text' => $protocol->final_transcript]
+            [
+                'user_protocol_number' => $protocol->user_protocol_number,
+                'event_date' => $protocol->event_date->translatedFormat('«d» F Y г.'),
+                'city' => $protocol->city,
+                'event_start_time' => $protocol->event_start_time->format('H ч.i мин'),
+                'location' => $protocol->location,
+                'members_count' => $protocol->members()->count(),
+                'agenda' => $protocol->agenda,
+                'final_transcript' => json_decode($protocol->final_transcript, true),
+            ]
             )
-            ->setPaper('A4', 'landscape')
+            ->setPaper('A4', 'portrait')
             ->download($protocol->theme);
     }
 
@@ -107,16 +120,7 @@ class ProtocolDocumentController extends Controller
             return response()->json(['message' => 'Протокол не найден.'], 404);
         }
 
-        $phpWord = new PhpWord();
-
-        $section = $phpWord->addSection();
-
-        $section->addText($protocol->final_transcript);
-
-        $filePath = storage_path('app/public/'. uniqid() .'.docx');
-
-        $objWriter = IOFactory::createWriter($phpWord, 'Word2007');
-        $objWriter->save($filePath);
+        $filePath = $this->service->generateDocx($protocol);
 
         return response()->download($filePath)->deleteFileAfterSend(true);
     }

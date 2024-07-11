@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\Keyword;
-use App\Models\ProtocolKeyword;
 use Illuminate\Support\Collection;
 
 
@@ -16,8 +15,8 @@ class KeywordService
 
         foreach ($data['keywords'] as $keyword) {
             $newKeywords[] = [
-                'title' => $keyword['title'],
-                'phrase' => $keyword['phrase'],
+                'title' => str_replace("\n", "", $keyword['title']),
+                'phrase' => str_replace("\n", "", $keyword['phrase']),
                 'user_id' => auth()->id(),
                 'created_at' => $currentTime,
                 'updated_at' => $currentTime,

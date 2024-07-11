@@ -32,7 +32,7 @@ class VideoProcessedBroadcast implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('protocol.' . $this->protocol->id),
+            new PrivateChannel('secretary_protocol.' . $this->protocol->id),
         ];
     }
 

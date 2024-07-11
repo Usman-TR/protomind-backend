@@ -53,11 +53,6 @@ class ProtocolService
 
     public function update(Protocol $protocol, array $data): void
     {
-        if(isset($data['final_transcript']) &&
-            $data['final_transcript'] && is_null($protocol->final_transcript)) {
-            $data['stage'] = ProtocolStageEnum::FINAL->value;
-        }
-
         if(isset($data['execute']) && $data['execute']) {
             $data['status'] = ProtocolStatusEnum::SUCCESS->value;
         }
@@ -65,38 +60,49 @@ class ProtocolService
         $protocol->update($data);
     }
 
-//    public function getFinalTranscript(string $text): string
-//    {
-//        $keywords = auth()->user()->keywords;
-//        $transcript = $text;
-//
-//        $positions = [];
-//
-//        foreach ($keywords as $keyword) {
-//            $title = $keyword->title;
-//            $phrase = $keyword->phrase;
-//
-//            if (mb_stripos($transcript, $phrase) !== false) {
-//                $positions[$title] = mb_strrpos($transcript, $phrase);
-//            }
-//        }
-//
-//        asort($positions);
-//
-//        $result = '';
-//
-//        $values = array_values($positions);
-//        $keys = array_keys($positions);
-//
-//        for ($i = 0; $i < count($positions); $i++) {
-//            $key = $keys[$i];
-//
-//            $start = $values[$i];
-//            $end = $values[$i + 1] ?? PHP_INT_MAX;
-//
-//            $result .= mb_strtoupper($key) . ":\n" . mb_substr($transcript, $start, $end - $start) . "\n\n";
-//        }
-//
-//        return $result;
-//    }
+    public function getFinalTranscript(string $text): array
+    {
+        $keywords = auth()->user()->keywords;
+        $transcript = $text;
+
+        $positions = [];
+        $allKeywords = [];
+
+        foreach ($keywords as $keyword) {
+            $title = $keyword->title;
+            $phrase = $keyword->phrase;
+            $allKeywords[] = $title;
+
+            $pos = mb_stripos($transcript, $phrase);
+            if ($pos !== false) {
+                $positions[$title] = $pos;
+            }
+        }
+
+        asort($positions);
+
+        $result = array_fill_keys($allKeywords, '');
+
+        $values = array_values($positions);
+        $keys = array_keys($positions);
+
+        for ($i = 0; $i < count($positions); $i++) {
+            $key = $keys[$i];
+            $start = $values[$i];
+            $end = $values[$i + 1] ?? mb_strlen($transcript);
+
+            $result[$key] = mb_substr($transcript, $start, $end - $start);
+        }
+
+        $finalArr = [];
+        $finalArrKeys = array_keys($result);
+        $finalArrValues = array_values($result);
+
+        for ($i = 0; $i < count($result); $i++) {
+            $finalArr[$i]['key'] = $finalArrKeys[$i];
+            $finalArr[$i]['value'] = $finalArrValues[$i];
+        }
+
+        return $finalArr;
+    }
 }
