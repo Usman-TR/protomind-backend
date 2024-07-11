@@ -299,4 +299,44 @@ class ProtocolController extends Controller
             ProtocolResource::make($protocol)
         );
     }
+
+    /**
+     * @OA\Get (
+     *     path="/protocols/{id}/final",
+     *     summary="Получает финальную версию транскрипции по ключевым словам",
+     *     tags={"Protocols"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Идентификатор протокола",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Успешный ответ",
+     *         @OA\JsonContent(ref="#/components/schemas/ProtocolResource")
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Протокол не найден"
+     *     )
+     * )
+     */
+    public function getFinalTranscript(string $id): JsonResponse
+    {
+        $protocol = Protocol::find($id);
+
+        if(!$protocol) {
+            return ResponseService::notFound(message: 'Протокол не найден.');
+        }
+
+        $finalTranscript = $this->service->getFinalTranscript($protocol->transcript, $protocol->creator_id);
+
+        return ResponseService::success(
+            $finalTranscript
+        );
+    }
 }

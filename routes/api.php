@@ -51,6 +51,7 @@ Route::group(["middleware" => "auth:api"], function() {
     Route::delete('protocols/tasks/{id}', [ProtocolTaskController::class, 'destroy']);
 
     Route::post('protocols/{id}/final', [ProtocolController::class, 'saveFinalTranscript']);
+    Route::get('protocols/{id}/final', [ProtocolController::class, 'getFinalTranscript']);
     Route::apiResource('protocols', ProtocolController::class);
     Route::apiResource('protocols/{id}/members', ProtocolMemberController::class)->except('destroy', 'update');
     Route::delete('protocols/members/{id}', [ProtocolMemberController::class, 'destroy']);

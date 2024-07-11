@@ -911,6 +911,39 @@
             }
         },
         "/protocols/{id}/final": {
+            "get": {
+                "tags": [
+                    "Protocols"
+                ],
+                "summary": "Получает финальную версию транскрипции по ключевым словам",
+                "operationId": "1d5205d0f574a7509c84e6abefa15ea2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Идентификатор протокола",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешный ответ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProtocolResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Протокол не найден"
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "Protocols"
