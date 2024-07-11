@@ -97,6 +97,7 @@ class Protocol extends Model implements HasMedia
         'status' => ProtocolStatusEnum::class,
         'event_start_time' => 'datetime',
         'event_date' => 'datetime',
+        'final_transcript' => 'array',
     ];
 
     public function members(): HasMany

@@ -47,7 +47,7 @@ class ProtocolDocumentService
         $section->addText("Ход заседания и принятые решения: ", ['bold' => true], ['alignment' => Jc::START]);
         $section->addTextBreak(1);
 
-        foreach (json_decode($protocol->final_transcript, true) as $item) {
+        foreach ($protocol->final_transcript as $item) {
             $key = mb_strtoupper($item['key']);
             $value = $item['value'];
 

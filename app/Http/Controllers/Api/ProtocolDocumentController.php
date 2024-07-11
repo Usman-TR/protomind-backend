@@ -70,7 +70,7 @@ class ProtocolDocumentController extends Controller
                 'location' => $protocol->location,
                 'members_count' => $protocol->members()->count(),
                 'agenda' => $protocol->agenda,
-                'final_transcript' => json_decode($protocol->final_transcript, true),
+                'final_transcript' => $protocol->final_transcript,
             ]
             )
             ->setPaper('A4', 'portrait')
