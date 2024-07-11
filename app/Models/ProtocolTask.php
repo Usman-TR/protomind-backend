@@ -7,6 +7,7 @@ use App\Http\Filters\Traits\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @OA\Schema(
@@ -84,5 +85,10 @@ class ProtocolTask extends Model
     public function responsible(): BelongsTo
     {
         return $this->belongsTo(User::class, 'responsible_id');
+    }
+
+    public function statusChanges(): HasMany
+    {
+        return $this->hasMany(ProtocolTaskStatusChange::class);
     }
 }

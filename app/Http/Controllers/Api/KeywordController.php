@@ -42,7 +42,7 @@ class KeywordController extends Controller
      */
     public function index(): JsonResponse
     {
-        $keywords = Keyword::latest()->get();
+        $keywords = auth()->user()->keywords()->latest()->get();
 
         return ResponseService::success(KeywordResource::collection($keywords));
     }
@@ -110,7 +110,7 @@ class KeywordController extends Controller
      */
     public function update(UpdateRequest $request, string $id): JsonResponse
     {
-        $keyword = Keyword::find($id);
+        $keyword = auth()->user()->keywords()->where('id', $id)->first();
 
         if(!$keyword) {
             return ResponseService::notFound(message: 'Ничего не найдено.');

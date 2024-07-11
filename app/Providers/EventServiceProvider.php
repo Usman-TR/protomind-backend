@@ -3,11 +3,14 @@
 namespace App\Providers;
 
 use App\Models\MeetingMember;
+use App\Models\Protocol;
+use App\Models\ProtocolTask;
 use App\Observers\MeetingMemberObserver;
+use App\Observers\ProtocolObserver;
+use App\Observers\ProtocolTaskObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -28,6 +31,8 @@ class EventServiceProvider extends ServiceProvider
     public function boot(): void
     {
         MeetingMember::observe(MeetingMemberObserver::class);
+        Protocol::observe(ProtocolObserver::class);
+        ProtocolTask::observe(ProtocolTaskObserver::class);
     }
 
     /**

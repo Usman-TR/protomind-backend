@@ -18,6 +18,7 @@ class KeywordService
             $newKeywords[] = [
                 'title' => $keyword['title'],
                 'phrase' => $keyword['phrase'],
+                'user_id' => auth()->id(),
                 'created_at' => $currentTime,
                 'updated_at' => $currentTime,
             ];

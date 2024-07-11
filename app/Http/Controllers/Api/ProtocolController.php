@@ -133,7 +133,7 @@ class ProtocolController extends Controller
 
     public function show(string $id): JsonResponse
     {
-        $protocol = Protocol::find($id);
+        $protocol = auth()->user()->protocols()->where('id', $id)->first();
 
         if(!$protocol) {
             return ResponseService::notFound(message: 'Протокол не найден.');

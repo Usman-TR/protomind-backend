@@ -27,6 +27,7 @@ class ProtocolResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'protocol_number' => $this->user_protocol_number,
             'theme' => $this->theme,
             'agenda' => $this->agenda,
             'event_date' => $this->event_date,

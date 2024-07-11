@@ -22,6 +22,11 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  *         description="ID протокола"
  *     ),
  *     @OA\Property(
+ *          property="protocol_number",
+ *          type="integer",
+ *          description="Номер протокола"
+ *      ),
+ *     @OA\Property(
  *         property="theme",
  *         type="string",
  *         description="Тема протокола"
@@ -81,6 +86,7 @@ class Protocol extends Model implements HasMedia
         'status',
         'stage',
         'transcript',
+        'user_protocol_number',
     ];
 
     protected $casts = [

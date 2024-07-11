@@ -65,8 +65,38 @@ class ProtocolService
         $protocol->update($data);
     }
 
-    public function getFinalTranscript(Protocol $protocol): void
-    {
-
-    }
+//    public function getFinalTranscript(string $text): string
+//    {
+//        $keywords = auth()->user()->keywords;
+//        $transcript = $text;
+//
+//        $positions = [];
+//
+//        foreach ($keywords as $keyword) {
+//            $title = $keyword->title;
+//            $phrase = $keyword->phrase;
+//
+//            if (mb_stripos($transcript, $phrase) !== false) {
+//                $positions[$title] = mb_strrpos($transcript, $phrase);
+//            }
+//        }
+//
+//        asort($positions);
+//
+//        $result = '';
+//
+//        $values = array_values($positions);
+//        $keys = array_keys($positions);
+//
+//        for ($i = 0; $i < count($positions); $i++) {
+//            $key = $keys[$i];
+//
+//            $start = $values[$i];
+//            $end = $values[$i + 1] ?? PHP_INT_MAX;
+//
+//            $result .= mb_strtoupper($key) . ":\n" . mb_substr($transcript, $start, $end - $start) . "\n\n";
+//        }
+//
+//        return $result;
+//    }
 }

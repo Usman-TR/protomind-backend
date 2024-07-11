@@ -10,6 +10,7 @@ use App\Http\Filters\TaskStatFilter;
 use App\Models\Meeting;
 use App\Models\Protocol;
 use App\Models\ProtocolTask;
+use App\Models\ProtocolTaskStatusChange;
 use App\Models\User;
 use App\Services\ResponseService;
 use Carbon\Carbon;
@@ -252,39 +253,25 @@ class StatController extends Controller
      */
     public function getSecretaryTasksStat(string $id, TaskStatFilter $filter)
     {
-        $tasks = ProtocolTask::whereHas('protocol.creator', function ($query) use ($id) {
-            $query->where('id', $id);
-        })->filter($filter)->get();
+        $tasks = ProtocolTaskStatusChange::where('user_id', $id)
+            ->filter($filter)
+            ->get()
+            ->groupBy(function ($task) {
+                return $task->created_at->weekOfMonth;
+            })
+            ->map(function ($group) {
+                $latestTasks = $group->groupBy('protocol_task_id')
+                    ->map->last()
+                    ->values();
 
-        $data = $tasks->groupBy(function ($task) {
-            $carbonDate = Carbon::parse($task->created_at);
-            return $carbonDate->weekOfMonth;
-        })->map(function ($group) {
-            return [
-                'week' => $group->first()->created_at->weekOfMonth,
-                'in_process' => $group->where('status', ProtocolTaskStatusEnum::PROCESS)->count(),
-                'success' => $group->where('status', ProtocolTaskStatusEnum::SUCCESS)->count(),
-                'expired' => $group->where('status', ProtocolTaskStatusEnum::EXPIRED)->count(),
-            ];
-        })->sortBy('week')->values();
-
-        $minWeek = $data->min('week');
-        $maxWeek = $data->max('week');
-        $allWeeks = collect(range($minWeek, $maxWeek));
-
-        $completeData = $allWeeks->map(function ($week) use ($data) {
-            $weekData = $data->firstWhere('week', $week);
-            if (!$weekData) {
-                $weekData = [
-                    'week' => $week,
-                    'in_process' => 0,
-                    'success' => 0,
-                    'expired' => 0,
+                return [
+                    'week' => $group->first()->created_at->weekOfMonth,
+                    'in_process' => $latestTasks->where('status', ProtocolTaskStatusEnum::PROCESS->value)->count(),
+                    'success' => $latestTasks->where('status', ProtocolTaskStatusEnum::SUCCESS->value)->count(),
+                    'expired' => $latestTasks->where('status', ProtocolTaskStatusEnum::EXPIRED->value)->count(),
                 ];
-            }
-            return $weekData;
-        });
+            });
 
-        return $completeData->sortBy('week')->values();
+        return ResponseService::success($tasks);
     }
 }
