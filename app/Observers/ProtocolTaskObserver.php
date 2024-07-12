@@ -7,6 +7,13 @@ use App\Models\ProtocolTaskStatusChange;
 
 class ProtocolTaskObserver
 {
+    public function created(ProtocolTask $protocolTask): void
+    {
+        $protocolTask->statusChanges()->create([
+            'user_id' => auth()->id(),
+            'status' => $protocolTask->status,
+        ]);
+    }
     public function updated(ProtocolTask $protocolTask): void
     {
         if($protocolTask->isDirty('status')) {

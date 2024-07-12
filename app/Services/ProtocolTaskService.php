@@ -19,7 +19,7 @@ class ProtocolTaskService
             $task->update(['status' => ProtocolTaskStatusEnum::EXPIRED->value]);
         } else {
             $delay = Carbon::parse($task->deadline)->diffInSeconds(Carbon::now());
-            UpdateProtocolTaskStatusJob::dispatch($task)->delay(Carbon::now()->addSeconds($delay));
+            UpdateProtocolTaskStatusJob::dispatch($task, auth()->id())->delay(Carbon::now()->addSeconds($delay));
         }
 
         return $task;
