@@ -339,4 +339,52 @@ class ProtocolController extends Controller
             $finalTranscript
         );
     }
+
+    /**
+     * @OA\Post(
+     *     path="api/protocols/{id}/process-video",
+     *     summary="Запустить обработку видео для протокола",
+     *     description="Запускает процесс обработки видео и транскрибации для указанного протокола.",
+     *     operationId="runVideoProcessing",
+     *     tags={"Protocols"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Идентификатор протокола",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Успешный запуск обработки видео",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="data", type="object", example=null)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Протокол не найден",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Протокол не найден.")
+     *         )
+     *     ),
+     *     security={{"bearerAuth": {}}}
+     * )
+     */
+    public function runVideoProcessing(string $id): JsonResponse
+    {
+        $protocol = Protocol::find($id);
+
+        if(!$protocol) {
+            return ResponseService::notFound(message: 'Протокол не найден.');
+        }
+
+        $this->service->processTranscript($protocol);
+
+        return  ResponseService::success();
+    }
 }

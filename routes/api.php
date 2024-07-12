@@ -52,6 +52,7 @@ Route::group(["middleware" => "auth:api"], function() {
 
     Route::post('protocols/{id}/final', [ProtocolController::class, 'saveFinalTranscript']);
     Route::get('protocols/{id}/final', [ProtocolController::class, 'getFinalTranscript']);
+    Route::post('protocols/{id}/process-video', [ProtocolController::class, 'runVideoProcessing']);
     Route::apiResource('protocols', ProtocolController::class);
     Route::apiResource('protocols/{id}/members', ProtocolMemberController::class)->except('destroy', 'update');
     Route::delete('protocols/members/{id}', [ProtocolMemberController::class, 'destroy']);

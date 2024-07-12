@@ -22,12 +22,10 @@ class ProtocolService
 
         $protocol->addMedia($data['video'])->toMediaCollection('video');
 
-        $this->processTranscript($protocol);
-
         return $protocol;
     }
 
-    private function processTranscript(Protocol $protocol): void
+    public function processTranscript(Protocol $protocol): void
     {
         $relativePath = str_replace(config('app.url') . '/storage', '', $protocol->getFirstMediaUrl('video'));
 
