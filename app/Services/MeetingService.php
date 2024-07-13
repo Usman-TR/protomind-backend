@@ -92,6 +92,9 @@ class MeetingService
                     $this->sendNotification($meeting, $meetingMember->member);
                 }
             }
+        } else {
+            $currentMemberIds = $meeting->members->pluck('id')->toArray();
+            MeetingMember::destroy($currentMemberIds);
         }
     }
 }
