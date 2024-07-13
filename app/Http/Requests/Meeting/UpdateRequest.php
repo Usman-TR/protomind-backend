@@ -98,8 +98,8 @@ class UpdateRequest extends FormRequest
             'event_start_time' => ['sometimes', 'date_format:H:i'],
             'event_end_time' => ['sometimes', 'date_format:H:i'],
             'members' => ['sometimes', 'array'],
-            'members.*.member_id' => ['required_with:members', 'integer', 'exists:users,id'],
-            'members.*.should_notify' => ['required_with:members', 'boolean'],
+            'members.*.member_id' => ['integer', 'exists:users,id'],
+            'members.*.should_notify' => ['boolean'],
         ];
     }
 }
