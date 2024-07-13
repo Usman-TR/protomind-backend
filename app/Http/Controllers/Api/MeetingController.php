@@ -209,7 +209,7 @@ class MeetingController extends Controller
         $this->service->update($meeting, $validated);
 
         return ResponseService::success(
-            MeetingResource::make($meeting)
+            MeetingResource::make($meeting->refresh())
         );
     }
 

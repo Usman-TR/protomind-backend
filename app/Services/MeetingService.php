@@ -60,6 +60,7 @@ class MeetingService
             $incomingMemberIds = collect($data['members'])->pluck('member_id')->filter()->toArray();
 
             $idsToDelete = array_diff($currentMemberIds, $incomingMemberIds);
+
             MeetingMember::destroy($idsToDelete);
 
             foreach ($data['members'] as $memberData) {
