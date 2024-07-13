@@ -32,8 +32,6 @@ Route::prefix('change-password')->controller(ChangePasswordController::class)->g
 
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
-    Route::post('change-password/send-link', 'sendLinkChangePassword');
-    Route::post('change-password/change', 'changePassword');
 
     Route::group(["middleware" => "auth:api"], function() {
         Route::post('logout', 'logout');
@@ -57,6 +55,8 @@ Route::group(["middleware" => "auth:api"], function() {
     Route::apiResource('protocols/{id}/members', ProtocolMemberController::class)->except('destroy', 'update');
     Route::delete('protocols/members/{id}', [ProtocolMemberController::class, 'destroy']);
 
+    Route::get('protocols/{id}/documents/docx', [ProtocolDocumentController::class, 'generateDocx']);
+    Route::get('protocols/{id}/documents/pdf', [ProtocolDocumentController::class, 'generatePdf']);
 
 
     Route::prefix('keywords')->controller(KeywordController::class)->group(function () {
@@ -75,5 +75,3 @@ Route::group(["middleware" => "auth:api"], function() {
     Route::get('stats/secretary/{id}/entities', [StatController::class, 'getSecretaryEntitiesStat']);
     Route::get('stats/secretary/{id}/tasks', [StatController::class, 'getSecretaryTasksStat']);
 });
-Route::get('protocols/{id}/documents/docx', [ProtocolDocumentController::class, 'generateDocx']);
-Route::get('protocols/{id}/documents/pdf', [ProtocolDocumentController::class, 'generatePdf']);

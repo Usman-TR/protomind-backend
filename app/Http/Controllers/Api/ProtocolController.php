@@ -52,7 +52,7 @@ class ProtocolController extends Controller
 
         $protocols = auth()->user()->protocols()
             ->orderByRaw("CASE WHEN stage = ? THEN 0 ELSE 1 END", [ProtocolStageEnum::VIDEO_PROCESS->value])
-            ->orderByRaw("CASE WHEN status = ? THEN 0 ELSE 1 END", [ProtocolStatusEnum::PROCESS->value])
+            ->orderByRaw("user_protocol_number", "desc")
             ->paginate($limit);
 
         return ResponseService::success(
