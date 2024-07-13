@@ -51,6 +51,7 @@ class ProtocolController extends Controller
         $limit = $request->query('limit', config('constants.paginator.limit'));
 
         $protocols = auth()->user()->protocols()
+            ->orderByRaw("CASE WHEN stage = ? THEN 0 ELSE 1 END", [ProtocolStageEnum::VIDEO_PROCESS->value])
             ->orderByRaw("CASE WHEN status = ? THEN 0 ELSE 1 END", [ProtocolStatusEnum::PROCESS->value])
             ->paginate($limit);
 
