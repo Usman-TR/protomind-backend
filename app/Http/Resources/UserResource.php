@@ -116,7 +116,7 @@ class UserResource extends JsonResource
             "updated_at" => $this->updated_at,
         ];
 
-        if(auth()->user()->hasRole([RolesEnum::MANAGER->value, RolesEnum::ADMIN->value])) {
+        if(auth()->check() && auth()->user()->hasRole([RolesEnum::MANAGER->value, RolesEnum::ADMIN->value])) {
             $res['is_active'] = $this->is_active;
         }
 

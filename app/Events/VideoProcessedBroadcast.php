@@ -14,14 +14,13 @@ class VideoProcessedBroadcast implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    private ProtocolResource $protocol;
     /**
      * Create a new event instance.
      */
-    public function __construct(
-        private readonly Protocol $protocol
-    )
+    public function __construct(Protocol $protocol)
     {
-
+        $this->protocol = ProtocolResource::make($protocol);
     }
 
     /**
