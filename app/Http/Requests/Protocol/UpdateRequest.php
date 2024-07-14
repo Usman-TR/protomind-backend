@@ -93,7 +93,7 @@ class UpdateRequest extends FormRequest
             'director_id' => ['sometimes', 'integer'],
             'event_date' => ['sometimes', 'date_format:Y-m-d'],
             'video' => ['sometimes', 'file', 'mimes:mp4,avi,mov,wmv,mkv,flv,m4v,webm,ogg'],
-            'status' => ['sometimes', 'boolean', new Enum(ProtocolStatusEnum::class)],
+            'status' => ['sometimes', new Enum(ProtocolStatusEnum::class)],
         ];
     }
 }
