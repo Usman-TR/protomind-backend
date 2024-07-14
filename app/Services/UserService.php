@@ -34,7 +34,7 @@ class UserService
         if($user->hasRole(RolesEnum::SECRETARY->value)) {
             $query = $query->whereHas('roles', function($q) {
                 $q->whereNot('name', 'admin');
-            })->whereNot('id', $user->id);
+            });
         }
 
         if($user->hasRole(RolesEnum::MANAGER->value)) {
