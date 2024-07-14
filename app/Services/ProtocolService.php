@@ -52,10 +52,6 @@ class ProtocolService
 
     public function update(Protocol $protocol, array $data): void
     {
-        if(isset($data['execute']) && $data['execute']) {
-            $data['status'] = ProtocolStatusEnum::SUCCESS->value;
-        }
-
         $protocol->update($data);
     }
 

@@ -35,7 +35,7 @@ class ProcessVideoJob implements ShouldQueue
     public function handle(): void
     {
         $url = env('SPEECH_TRANSCRIBE_URL', 'http://127.0.0.1:8001');
-        $response = Http::withOptions(['timeout' => 0])->post($url . '/transcribe', [
+        $response = Http::withOptions(['timeout' => 0])->post($url . '/transcribe/', [
             'filepath' => $this->filepath,
         ]);
 

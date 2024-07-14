@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Protocol;
 
+use App\Enums\ProtocolStatusEnum;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 
 /**
@@ -60,9 +62,9 @@ use Illuminate\Foundation\Http\FormRequest;
  *         nullable=true
  *     ),
  *     @OA\Property(
- *         property="execute",
+ *         property="status",
  *         type="boolean",
- *         description="Выполнить",
+ *         description="статус",
  *         nullable=true
  *     )
  * )
@@ -91,7 +93,7 @@ class UpdateRequest extends FormRequest
             'director_id' => ['sometimes', 'integer'],
             'event_date' => ['sometimes', 'date_format:Y-m-d'],
             'video' => ['sometimes', 'file', 'mimes:mp4,avi,mov,wmv,mkv,flv,m4v,webm,ogg'],
-            'execute' => ['sometimes', 'boolean'],
+            'status' => ['sometimes', 'boolean', new Enum(ProtocolStatusEnum::class)],
         ];
     }
 }

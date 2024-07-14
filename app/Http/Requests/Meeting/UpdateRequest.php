@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Meeting;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 /**
  * @OA\Schema(
