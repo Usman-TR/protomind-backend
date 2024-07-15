@@ -15,10 +15,9 @@ class UsersSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'department' => 'global',
-            'login' => 'global',
-            'password' => Hash::make('test'),
-            'email' => 'test@gmail.com',
+            'department' => 'admin',
+            'password' => Hash::make('admin'),
+            'email' => 'admin@gmail.com',
             'full_name' => 'A B C',
         ])->assignRole('admin');
     }
