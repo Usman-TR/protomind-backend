@@ -22,6 +22,8 @@ class ProcessVideoJob implements ShouldQueue
     /**
      * Create a new job instance.
      */
+    public int $tries = 3;
+    public int $timeout = 3600;
 
     public function __construct(
         private readonly Protocol $protocol,
