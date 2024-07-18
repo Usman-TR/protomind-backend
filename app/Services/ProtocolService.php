@@ -2,10 +2,8 @@
 
 namespace App\Services;
 
-use App\Enums\ProtocolStageEnum;
 use App\Enums\ProtocolStatusEnum;
 use App\Jobs\ProcessVideoJob;
-use App\Models\Keyword;
 use App\Models\Protocol;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
@@ -27,14 +25,10 @@ class ProtocolService
 
     public function processTranscript(Protocol $protocol): void
     {
-        $relativePath = str_replace(config('app.url') . '/storage', '', $protocol->getFirstMediaUrl('video'));
-
-        $wavPath = $this->convertToWav($relativePath);
-
-        ProcessVideoJob::dispatch($protocol, $wavPath, ProtocolService::class);
+        ProcessVideoJob::dispatch($protocol);
     }
 
-    private function convertToWav($filePath): string
+    public function convertToWav($filePath): string
     {
         $outputPath = 'wav/' . uniqid() . '.wav';
 

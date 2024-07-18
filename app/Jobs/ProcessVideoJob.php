@@ -22,11 +22,12 @@ class ProcessVideoJob implements ShouldQueue
     /**
      * Create a new job instance.
      */
+
     public function __construct(
-        private Protocol        $protocol,
-        private readonly string $filepath,
+        private readonly Protocol $protocol,
     )
     {
+
     }
 
     /**
@@ -34,9 +35,12 @@ class ProcessVideoJob implements ShouldQueue
      */
     public function handle(): void
     {
+        $relativePath = str_replace(config('app.url') . '/storage', '', $this->protocol->getFirstMediaUrl('video'));
+        $filepath = app(ProtocolService::class)->convertToWav($relativePath);
+
         $url = env('SPEECH_TRANSCRIBE_URL', 'http://127.0.0.1:8001');
         $response = Http::withOptions(['timeout' => 0])->post($url . '/transcribe/', [
-            'filepath' => $this->filepath,
+            'filepath' => $filepath,
         ]);
 
 
@@ -57,7 +61,7 @@ class ProcessVideoJob implements ShouldQueue
             ]);
         }
 
-        unlink($this->filepath);
+        unlink($filepath);
 
     }
 }
