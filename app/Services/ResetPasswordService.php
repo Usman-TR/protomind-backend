@@ -36,7 +36,13 @@ class ResetPasswordService
 
         if (RateLimiter::tooManyAttempts($key, $maxAttempts)) {
             $secondsLeft = RateLimiter::availableIn($key);
-            throw new \Exception("Слишком много попыток. Пожалуйста, попробуйте через {$secondsLeft} секунд.");
+            $minutesLeft = ceil($secondsLeft / 60);
+
+            $message = $minutesLeft > 1
+                ? "Вы сможете запросить следующий сброс пароля через {$minutesLeft} минут."
+                : "Вы сможете запросить следующий  сброс пароля через 1 минуту.";
+
+            throw new \Exception($message);
         }
 
         try {
