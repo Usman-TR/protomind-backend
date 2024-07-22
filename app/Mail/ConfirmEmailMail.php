@@ -23,7 +23,7 @@ class ConfirmEmailMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Protomind: Подтвердите адрес электронной почты.',
+            subject: 'Protomind: Успешная регистрация.',
         );
     }
 

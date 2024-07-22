@@ -32,7 +32,7 @@ class ResetPasswordService
 
         $key = 'password-reset:' . $user->id;
         $maxAttempts = 1; // Максимальное количество попыток
-        $decaySeconds = config('auth.passwords.users.throttle', 60); // Время ожидания в секундах
+        $decayMinutes = config('auth.passwords.users.throttle', 60) * 60; // Время ожидания в минутах
 
         if (RateLimiter::tooManyAttempts($key, $maxAttempts)) {
             $secondsLeft = RateLimiter::availableIn($key);
@@ -47,7 +47,7 @@ class ResetPasswordService
             Mail::to($email)->send(new SendLinkChangePasswordMail($url));
 
             // Увеличиваем счетчик попыток
-            RateLimiter::hit($key, $decaySeconds);
+            RateLimiter::hit($key, $decayMinutes);
 
             return Password::RESET_LINK_SENT;
         } catch (\Exception $e) {
