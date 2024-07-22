@@ -28,7 +28,7 @@
         .header h1 {
             margin: 0;
             font-size: 24px;
-            color: #007bff;
+            color: #7130A3;
         }
         .content {
             padding: 20px 0;
@@ -43,7 +43,7 @@
             margin-top: 10px;
             font-size: 16px;
             color: #ffffff;
-            background-color: #007bff;
+            background-color: #7130A3;
             text-decoration: none;
             border-radius: 5px;
         }

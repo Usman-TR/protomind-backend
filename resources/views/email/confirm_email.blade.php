@@ -29,7 +29,7 @@
         .header h1 {
             margin: 0;
             font-size: 24px;
-            color: #007bff;
+            color: #7130A3;
         }
         .content {
             padding: 20px 0;
@@ -64,7 +64,7 @@
             <table class="container" width="100%" cellpadding="0" cellspacing="0" bgcolor="#ffffff" align="center">
                 <tr>
                     <td class="header" style="padding: 20px; text-align: center; border-bottom: 1px solid #e4e4e4;">
-                        <h1 style="margin: 0; font-size: 24px; color: #007bff;">Добро пожаловать в Protomind</h1>
+                        <h1 style="margin: 0; font-size: 24px; color: #7130A3;">Добро пожаловать в Protomind</h1>
                     </td>
                 </tr>
                 <tr>

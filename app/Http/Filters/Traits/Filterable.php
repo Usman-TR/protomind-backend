@@ -3,7 +3,8 @@
 namespace App\Http\Filters\Traits;
 
 use App\Http\Filters\Abstract\QueryFilter;
-use Illuminate\Contracts\Database\Eloquent\Builder;
+use App\Http\Filters\EquipmentTypeFilter;
+use Illuminate\Database\Eloquent\Builder;
 
 trait Filterable
 {
