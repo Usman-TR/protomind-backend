@@ -6,12 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\SendLinkChangePasswordRequest;
 use App\Http\Requests\ChangePassword\CheckTokenRequest;
 use App\Http\Requests\ChangePassword\ResetRequest;
-use App\Models\User;
 use App\Services\ResetPasswordService;
 use App\Services\ResponseService;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Js;
 
 class ChangePasswordController extends Controller
 {
@@ -46,15 +47,25 @@ class ChangePasswordController extends Controller
     {
         $validated = $request->validated();
 
-        $user = User::where('email', $request->email)->first();
+        $tokenData = DB::table('password_reset_tokens')
+            ->where('email', $validated['email'])
+            ->first();
 
-        $tokenExists = Password::getRepository()->exists($user, $validated['token']);
-
-        if ($tokenExists) {
-            return ResponseService::success();
-        } else {
-            return ResponseService::notFound();
+        if (!$tokenData) {
+            return ResponseService::notFound(message: 'Токен не найден');
         }
+
+        if (!Hash::check($validated['token'], $tokenData->token)) {
+            return ResponseService::notFound(message: 'Неверный токен');
+        }
+
+        $createdAt = Carbon::parse($tokenData->created_at);
+        if (Carbon::now()->diffInMinutes($createdAt) > config('auth.passwords.users.expire', 60)) {
+            return ResponseService::notFound(message: 'Срок действия токена истек');
+        }
+
+        return ResponseService::success(message: 'Токен действителен');
+
     }
 
 
