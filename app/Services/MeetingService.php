@@ -38,7 +38,9 @@ class MeetingService
                         'created_at' => $currentTime,
                     ]);
 
-                    $this->sendNotification($meeting, $meetingMember->member);
+                    if($meetingMember->email_sent) {
+                        $this->sendNotification($meeting, $meetingMember->member);
+                    }
                 }
             }
 
