@@ -29,10 +29,12 @@ class MeetingMemberObserver
      */
     public function updated(MeetingMember $meetingMember): void
     {
-        $originalData = $meetingMember->getOriginal();
+        if($meetingMember->isDirty('email_sent')) {
+            $originalData = $meetingMember->getOriginal();
 
-        if(!$originalData['email_sent'] && $meetingMember->email_sent) {
-            $this->meetingService->sendNotification($meetingMember->meeting, $meetingMember->member);
+            if(!$originalData['email_sent'] && $meetingMember->email_sent) {
+                $this->meetingService->sendNotification($meetingMember->meeting, $meetingMember->member);
+            }
         }
 
     }

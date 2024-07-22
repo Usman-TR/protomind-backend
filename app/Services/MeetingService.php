@@ -30,17 +30,13 @@ class MeetingService
 
             if(isset($data['members'])) {
                 foreach($data['members'] as $member) {
-                    $meetingMember = MeetingMember::create([
+                    MeetingMember::create([
                         'meeting_id' => $meeting->id,
                         'member_id' => $member['member_id'],
                         'email_sent' => $member['should_notify'],
                         'updated_at' => $currentTime,
                         'created_at' => $currentTime,
                     ]);
-
-                    if($meetingMember->email_sent) {
-                        $this->sendNotification($meeting, $meetingMember->member);
-                    }
                 }
             }
 
@@ -76,24 +72,16 @@ class MeetingService
                     ->where('meeting_id', $meeting->id)
                     ->first();
 
-                if ($member) {
-                    if(!$member->email_sent) {
-                        $member->update([
-                            'email_sent' => $memberData['should_notify'],
-                        ]);
-
-                        $this->sendNotification($meeting, $member->member);
-                    }
+                if ($member && !$member->email_sent) {
+                    $member->update([
+                        'email_sent' => $memberData['should_notify'],
+                    ]);
                 } else {
-                    $meetingMember = MeetingMember::create([
+                    MeetingMember::create([
                         'meeting_id' => $meeting->id,
                         'email_sent' => $memberData['should_notify'],
                         'member_id' => $memberData['member_id'],
                     ]);
-
-                    if($meetingMember->email_sent) {
-                        $this->sendNotification($meeting, $meetingMember->member);
-                    }
                 }
             }
         } else {
