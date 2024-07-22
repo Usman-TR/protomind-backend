@@ -32,7 +32,7 @@
         }
         .content {
             padding: 20px 0;
-            text-align: center;
+            text-align: center !important;
         }
         .content p {
             margin: 0 0 10px;
@@ -65,7 +65,7 @@
         </td>
     </tr>
     <tr>
-        <td class="content">
+        <td class="content" style="text-align: center">
             <p>Здравствуйте!</p>
             <p>Вы приглашены на совещание</p>
             <p><strong>Тема:</strong> {{ $meeting->theme }}</p>
@@ -73,7 +73,7 @@
             <p><strong>Начало совещания:</strong> {{ $meeting->event_start_time }}</p>
             <p><strong>Конец совещания:</strong> {{ $meeting->event_end_time }}</p>
             <p style="text-align: center;">
-                <a href="{{ $meeting->link }}" class="button">Ссылка</a>
+                <a style="color: #ffffff;" href="{{ $meeting->link }}" class="button">Ссылка</a>
             </p>
             <p>Благодарим вас за внимание!</p>
         </td>
