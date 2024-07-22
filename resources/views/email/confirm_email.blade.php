@@ -8,8 +8,8 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
+            background-color: #f4f4f4 !important;
+            color: #333 !important;
             margin: 0;
             padding: 0;
         }
@@ -17,19 +17,19 @@
             width: 100%;
             max-width: 600px;
             margin: 0 auto;
-            background-color: #ffffff;
+            background-color: #ffffff !important;
             padding: 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
         }
         .header {
             text-align: center;
             padding-bottom: 20px;
-            border-bottom: 1px solid #e4e4e4;
+            border-bottom: 1px solid #e4e4e4 !important;
         }
         .header h1 {
             margin: 0;
             font-size: 24px;
-            color: #7130A3;
+            color: #7130A3 !important;
         }
         .content {
             padding: 20px 0;
@@ -39,21 +39,21 @@
             font-size: 16px;
         }
         .credentials {
-            background-color: #f9f9f9;
+            background-color: #f9f9f9 !important;
             padding: 10px;
-            border: 1px solid #e4e4e4;
+            border: 1px solid #e4e4e4 !important;
         }
         .credentials p {
             margin: 0;
             font-size: 14px;
-            color: #555;
+            color: #555 !important;
         }
         .footer {
             text-align: center;
             padding-top: 20px;
-            border-top: 1px solid #e4e4e4;
+            border-top: 1px solid #e4e4e4 !important;
             font-size: 12px;
-            color: #777;
+            color: #777 !important;
         }
     </style>
 </head>

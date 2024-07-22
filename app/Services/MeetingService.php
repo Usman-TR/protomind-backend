@@ -89,7 +89,9 @@ class MeetingService
                         'member_id' => $memberData['member_id'],
                     ]);
 
-                    $this->sendNotification($meeting, $meetingMember->member);
+                    if($meetingMember->email_sent) {
+                        $this->sendNotification($meeting, $meetingMember->member);
+                    }
                 }
             }
         } else {
