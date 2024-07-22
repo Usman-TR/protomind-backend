@@ -72,10 +72,12 @@ class MeetingService
                     ->where('meeting_id', $meeting->id)
                     ->first();
 
-                if ($member && !$member->email_sent) {
-                    $member->update([
-                        'email_sent' => $memberData['should_notify'],
-                    ]);
+                if ($member) {
+                    if(!$member->email_sent) {
+                        $member->update([
+                            'email_sent' => $memberData['should_notify'],
+                        ]);
+                    }
                 } else {
                     MeetingMember::create([
                         'meeting_id' => $meeting->id,
