@@ -28,12 +28,25 @@ class ProtocolService
         ProcessVideoJob::dispatch($protocol);
     }
 
-    public function convertToWav($filePath): string
+    public function convertToWav($filePath): ?string
     {
+        $media = FFMpeg::open($filePath);
+
+        $hasAudio = false;
+        foreach ($media->getStreams() as $stream) {
+            if ($stream->isAudio()) {
+                $hasAudio = true;
+                break;
+            }
+        }
+
+        if (!$hasAudio) {
+            return null;
+        }
+
         $outputPath = 'wav/' . uniqid() . '.wav';
 
-        FFMpeg::open($filePath)
-            ->export()
+        $media->export()
             ->toDisk(env('FILESYSTEM_DISK'))
             ->inFormat((new \FFMpeg\Format\Audio\Wav)
                 ->setAudioCodec('pcm_s16le')
@@ -42,6 +55,7 @@ class ProtocolService
             ->save($outputPath);
 
         return Storage::path($outputPath);
+
     }
 
     public function update(Protocol $protocol, array $data): void
