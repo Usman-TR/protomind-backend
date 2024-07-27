@@ -59,33 +59,6 @@ class ProcessVideoJob implements ShouldQueue
             return;
         }
 
-        if(is_null($filepath)) {
-            $this->protocol->update([
-                'stage' => ProtocolStageEnum::SUCCESS_VIDEO_PROCESS->value
-            ]);
-            broadcast(new VideoProcessedBroadcast($this->protocol));
-            return;
-        }
-
-        try {
-            $filepath = app(ProtocolService::class)->convertToWav($relativePath);
-
-            if (is_null($filepath)) {
-                $this->protocol->update([
-                    'stage' => ProtocolStageEnum::SUCCESS_VIDEO_PROCESS->value
-                ]);
-                broadcast(new VideoProcessedBroadcast($this->protocol));
-                return;
-            }
-        } catch (RuntimeException $e) {
-            $this->protocol->update([
-                'stage' => ProtocolStageEnum::ERROR_VIDEO_PROCESS->value
-            ]);
-
-            broadcast(new VideoProcessedBroadcast($this->protocol));
-
-            return;
-        }
 
         $url = env('SPEECH_TRANSCRIBE_URL', 'http://127.0.0.1:8001');
         $response = Http::withOptions(['timeout' => 0])->post($url . '/transcribe/', [
