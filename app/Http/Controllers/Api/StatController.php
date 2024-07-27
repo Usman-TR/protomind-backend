@@ -65,7 +65,11 @@ class StatController extends Controller
      */
     public function getManagerEntitiesStat(): JsonResponse
     {
+<<<<<<< HEAD
         $secretaryIds = User::find(auth()->id())->secretaries()->pluck('secretary_id')->toArray();
+=======
+        $secretaryIds = User::find(auth()->id())->secretaries()->pluck('id')->toArray();
+>>>>>>> 89ab16c3afa698af8ca7d29c65e16daed34e7fdf
 
         if(!$secretaryIds) {
             return ResponseService::badRequest();
