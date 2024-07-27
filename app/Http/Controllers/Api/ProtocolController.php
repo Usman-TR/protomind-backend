@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Enums\ProtocolStageEnum;
-use App\Enums\ProtocolStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Protocol\FinalRequest;
 use App\Http\Requests\Protocol\StoreRequest;

@@ -99,7 +99,7 @@ class ChangePasswordController extends Controller
 
             return ResponseService::success(message: __($status));
         } catch (\Exception $e) {
-            return ResponseService::badRequest($e->getMessage());
+            return ResponseService::badRequest(message: $e->getMessage());
         }
     }
 

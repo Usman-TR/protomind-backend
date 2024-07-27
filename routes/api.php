@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\ProtocolDocumentController;
 use App\Http\Controllers\Api\ProtocolMemberController;
 use App\Http\Controllers\Api\ProtocolTaskController;
 use App\Http\Controllers\Api\ChangePasswordController;
+use App\Http\Controllers\Api\ProtocolVideoUploadController;
 use App\Http\Controllers\Api\StatController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
@@ -43,6 +44,7 @@ Route::controller(AuthController::class)->group(function () {
 Route::group(["middleware" => "auth:api"], function() {
     Route::apiResource('users', UserController::class)->except('destroy');
 
+
     Route::get('protocols/tasks', [ProtocolTaskController::class, 'index']);
     Route::post('protocols/{id}/tasks', [ProtocolTaskController::class, 'store']);
     Route::put('protocols/tasks/{id}', [ProtocolTaskController::class, 'update']);
@@ -58,7 +60,6 @@ Route::group(["middleware" => "auth:api"], function() {
     Route::get('protocols/{id}/documents/docx', [ProtocolDocumentController::class, 'generateDocx']);
     Route::get('protocols/{id}/documents/pdf', [ProtocolDocumentController::class, 'generatePdf']);
 
-
     Route::prefix('keywords')->controller(KeywordController::class)->group(function () {
         Route::get('/', 'index');
         Route::post('/', 'store');
@@ -67,7 +68,6 @@ Route::group(["middleware" => "auth:api"], function() {
     });
 
     Route::apiResource('meetings', MeetingController::class);
-
 
     Route::get('stats/manager/all', [StatController::class, 'getManagerEntitiesStat']);
 

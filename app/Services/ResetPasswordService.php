@@ -38,9 +38,12 @@ class ResetPasswordService
             $secondsLeft = RateLimiter::availableIn($key);
             $minutesLeft = ceil($secondsLeft / 60);
 
-            $message = $minutesLeft > 1
-                ? "Вы сможете запросить следующий сброс пароля через {$minutesLeft} минут."
-                : "Вы сможете запросить следующий  сброс пароля через 1 минуту.";
+            $message = match (true) {
+                $minutesLeft >= 5 => "Вы сможете запросить следующий сброс пароля через {$minutesLeft} минут.",
+                $minutesLeft >= 2 => "Вы сможете запросить следующий сброс пароля через {$minutesLeft} минуты.",
+                $minutesLeft == 1 => "Вы сможете запросить следующий сброс пароля через 1 минуту.",
+                default => "Вы сможете запросить следующий сброс пароля менее чем через минуту.",
+            };
 
             throw new \Exception($message);
         }
