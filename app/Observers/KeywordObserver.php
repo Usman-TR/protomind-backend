@@ -17,4 +17,9 @@ class KeywordObserver
     {
         $this->keywordService->updateUserProtocols($keyword);
     }
+
+    public function deleted(Keyword $keyword): void
+    {
+        $this->keywordService->updateUserProtocols(null, $keyword);
+    }
 }

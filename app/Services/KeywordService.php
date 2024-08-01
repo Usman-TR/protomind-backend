@@ -38,23 +38,32 @@ class KeywordService
 
     /**
      * @param Keyword|null $updatedKeyword
+     * @param Keyword|null $deletedKeyword
      * @return void
      */
-    public function updateUserProtocols(?Keyword $updatedKeyword = null): void
+    public function updateUserProtocols(?Keyword $updatedKeyword = null, ?Keyword $deletedKeyword = null): void
     {
         $chunkSize = 100;
 
         auth()->user()->protocols()
-            ->chunkById($chunkSize, function ($protocols) use ($updatedKeyword) {
+            ->chunkById($chunkSize, function ($protocols) use ($updatedKeyword, $deletedKeyword) {
                 foreach ($protocols as $protocol) {
                     $currentFinalTranscript = $protocol->final_transcript;
-                    $newFinalTranscript = $this->protocolService->getFinalTranscript(
-                        $protocol->transcript,
-                        auth()->id(),
-                        $currentFinalTranscript,
-                        $updatedKeyword
-                    );
-                    $protocol->update(['final_transcript' => $newFinalTranscript]);
+
+                    if ($deletedKeyword) {
+                        $currentFinalTranscript = array_values(array_filter($currentFinalTranscript, function ($item) use ($deletedKeyword) {
+                            return $item['key'] !== $deletedKeyword->title || !empty($item['value']);
+                        }));
+                    } else {
+                        $currentFinalTranscript = $this->protocolService->getFinalTranscript(
+                            $protocol->transcript,
+                            auth()->id(),
+                            $currentFinalTranscript,
+                            $updatedKeyword
+                        );
+                    }
+
+                    $protocol->update(['final_transcript' => $currentFinalTranscript]);
                 }
             });
     }
