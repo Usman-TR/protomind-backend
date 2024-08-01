@@ -8,6 +8,12 @@ use Illuminate\Support\Collection;
 
 class KeywordService
 {
+    public function __construct(
+        private readonly ProtocolService $protocolService
+    )
+    {
+    }
+
     public function create(array $data): Collection
     {
         $currentTime = now();
@@ -25,6 +31,31 @@ class KeywordService
 
         Keyword::insert($newKeywords);
 
+        $this->updateUserProtocols();
+
         return Keyword::where('created_at', $currentTime)->get();
+    }
+
+    /**
+     * @param Keyword|null $updatedKeyword
+     * @return void
+     */
+    public function updateUserProtocols(?Keyword $updatedKeyword = null): void
+    {
+        $chunkSize = 100;
+
+        auth()->user()->protocols()
+            ->chunkById($chunkSize, function ($protocols) use ($updatedKeyword) {
+                foreach ($protocols as $protocol) {
+                    $currentFinalTranscript = $protocol->final_transcript;
+                    $newFinalTranscript = $this->protocolService->getFinalTranscript(
+                        $protocol->transcript,
+                        auth()->id(),
+                        $currentFinalTranscript,
+                        $updatedKeyword
+                    );
+                    $protocol->update(['final_transcript' => $newFinalTranscript]);
+                }
+            });
     }
 }

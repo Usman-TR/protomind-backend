@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\Keyword;
 use App\Models\MeetingMember;
 use App\Models\Protocol;
 use App\Models\ProtocolTask;
+use App\Observers\KeywordObserver;
 use App\Observers\MeetingMemberObserver;
 use App\Observers\ProtocolObserver;
 use App\Observers\ProtocolTaskObserver;
@@ -33,6 +35,7 @@ class EventServiceProvider extends ServiceProvider
         MeetingMember::observe(MeetingMemberObserver::class);
         Protocol::observe(ProtocolObserver::class);
         ProtocolTask::observe(ProtocolTaskObserver::class);
+        Keyword::observe(KeywordObserver::class);
     }
 
     /**

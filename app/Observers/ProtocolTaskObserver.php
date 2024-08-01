@@ -24,7 +24,7 @@ class ProtocolTaskObserver
                 ->delete();
 
             $protocolTask->statusChanges()->create([
-                'user_id' => auth()->id(),
+                'user_id' => auth()->id() ?? $protocolTask->protocol->secretary_id,
                 'status' => $protocolTask->status,
             ]);
         }

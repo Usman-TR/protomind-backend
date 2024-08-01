@@ -59,13 +59,13 @@ class ProcessVideoJob implements ShouldQueue
             return;
         }
 
-
-        $url = env('SPEECH_TRANSCRIBE_URL', 'http://127.0.0.1:8001');
+        $url = env('SPEECH_TRANSCRIBE_URL', 'http://127.0.0.1:8000');
         $response = Http::withOptions(['timeout' => 0])->post($url . '/transcribe/', [
             'filepath' => $filepath,
         ]);
 
-
+        \Log::info('tes');
+        \Log::info($response->body());
         if($response->successful()) {
             $transcript = json_decode($response->body())->text;
 

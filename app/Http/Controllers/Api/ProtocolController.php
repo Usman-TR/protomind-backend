@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Enums\ProtocolStageEnum;
+use App\Enums\ProtocolStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Protocol\FinalRequest;
 use App\Http\Requests\Protocol\StoreRequest;
@@ -50,7 +51,14 @@ class ProtocolController extends Controller
         $limit = $request->query('limit', config('constants.paginator.limit'));
 
         $protocols = auth()->user()->protocols()
-            ->orderByRaw("CASE WHEN stage = ? THEN 0 ELSE 1 END", [ProtocolStageEnum::VIDEO_PROCESS->value])
+            ->orderByRaw("CASE
+            WHEN status = ? THEN 0
+            WHEN status = ? THEN 1
+            ELSE 2
+            END", [
+                ProtocolStatusEnum::PROCESS->value,
+                ProtocolStatusEnum::SUCCESS->value
+            ])
             ->orderBy("user_protocol_number", "desc")
             ->paginate($limit);
 

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Enums\ProtocolStatusEnum;
 use App\Jobs\ProcessVideoJob;
+use App\Models\Keyword;
 use App\Models\Protocol;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
@@ -63,12 +64,14 @@ class ProtocolService
         $protocol->update($data);
     }
 
-    public function getFinalTranscript(string $transcript, string $userId): array
+    public function getFinalTranscript(?string $transcript, string $userId, ?array $currentFinalTranscript = null, ?Keyword $updatedKeyword = null): array
     {
         $keywords = User::find($userId)->keywords;
 
         $positions = [];
         $allKeywords = [];
+        $oldTitle = $updatedKeyword?->getOriginal('title');
+        $newTitle = $updatedKeyword?->title;
 
         foreach ($keywords as $keyword) {
             $title = $keyword->title;
@@ -97,12 +100,31 @@ class ProtocolService
         }
 
         $finalArr = [];
-        $finalArrKeys = array_keys($result);
-        $finalArrValues = array_values($result);
+        foreach ($allKeywords as $keyword) {
+            $finalArr[] = [
+                'key' => $keyword,
+                'value' => $result[$keyword]
+            ];
+        }
 
-        for ($i = 0; $i < count($result); $i++) {
-            $finalArr[$i]['key'] = $finalArrKeys[$i];
-            $finalArr[$i]['value'] = $finalArrValues[$i];
+        if ($currentFinalTranscript) {
+            if ($updatedKeyword) {
+                foreach ($currentFinalTranscript as &$item) {
+                    if ($item['key'] === $oldTitle) {
+                        $item['key'] = $newTitle;
+                    }
+                }
+            }
+
+            $existingKeys = array_column($currentFinalTranscript, 'key');
+
+            $finalArr = array_filter($finalArr, function($item) use ($existingKeys) {
+                return !in_array($item['key'], $existingKeys);
+            });
+
+            $mergedArr = array_merge($currentFinalTranscript, $finalArr);
+
+            return array_values($mergedArr);
         }
 
         return $finalArr;

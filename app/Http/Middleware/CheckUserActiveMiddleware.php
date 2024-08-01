@@ -16,9 +16,9 @@ class CheckUserActiveMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->check() && !auth()->user()->is_active) {
-            return ResponseService::forbidden(message: 'Ваш аккаунт был заблокирован.');
-        }
+//        if (auth()->check() && !auth()->user()->is_active) {
+//            return ResponseService::forbidden(message: 'Ваш аккаунт заморожен');
+//        }
 
         return $next($request);
     }

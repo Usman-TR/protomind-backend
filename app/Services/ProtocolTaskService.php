@@ -15,11 +15,14 @@ class ProtocolTaskService
 
         $task = ProtocolTask::create($data);
 
-        if (Carbon::now() > Carbon::parse($task->deadline)) {
+        $deadline = Carbon::parse($task->deadline)->startOfDay()->addDay();
+        $now = Carbon::now();
+
+        if ($now > $deadline) {
             $task->update(['status' => ProtocolTaskStatusEnum::EXPIRED->value]);
         } else {
-            $delay = Carbon::parse($task->deadline)->diffInSeconds(Carbon::now());
-            UpdateProtocolTaskStatusJob::dispatch($task, auth()->id())->delay(Carbon::now()->addSeconds($delay));
+            $delay = $deadline->diffInSeconds($now);
+            UpdateProtocolTaskStatusJob::dispatch($task)->delay($now->addSeconds($delay));
         }
 
         return $task;

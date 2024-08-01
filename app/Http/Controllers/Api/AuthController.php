@@ -3,18 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\ChangePasswordRequest;
 use App\Http\Requests\Auth\LoginRequest;
-use App\Http\Requests\Auth\SendLinkChangePasswordRequest;
 use App\Http\Resources\AuthResource;
 use App\Http\Resources\UserResource;
-use App\Services\AuthService;
+use App\Models\User;
 use App\Services\ResponseService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 
 
 class AuthController extends Controller
@@ -72,7 +67,17 @@ class AuthController extends Controller
             "password" => $validated["password"]
         ];
 
-        $token = Auth::attempt($credentials);
+        $user = User::withoutGlobalScopes()->where('email', $credentials['email'])->first();
+
+        $token = false;
+
+        if ($user && Auth::getProvider()->validateCredentials($user, $credentials)) {
+            $token = Auth::guard('api')->login($user);
+
+            if($token && !$user->is_active) {;
+                return ResponseService::unauthorized(message: 'Ваш аккаунт заморожен');
+            }
+        }
 
         if (!$token) return ResponseService::unauthorized(message: __('auth.failed'));
 
