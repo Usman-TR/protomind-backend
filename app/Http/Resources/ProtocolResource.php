@@ -40,7 +40,7 @@ class ProtocolResource extends JsonResource
             'location' => $this->location,
             'event_start_time' => $this->event_start_time,
             'city' => $this->city,
-            'video_path' => $this->getFirstMediaUrl('video'),
+            'video_media_id' => $this->getFirstMedia('video')?->id,
         ];
     }
 }

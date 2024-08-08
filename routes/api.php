@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\ChangePasswordController;
 use App\Http\Controllers\Api\ProtocolVideoUploadController;
 use App\Http\Controllers\Api\StatController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\VideoStreamController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -74,4 +75,6 @@ Route::group(["middleware" => "auth:api"], function() {
     Route::get('stats/secretary/meetings', [StatController::class, 'getSecretaryMeetingsStat']);
     Route::get('stats/secretary/{id}/entities', [StatController::class, 'getSecretaryEntitiesStat']);
     Route::get('stats/secretary/{id}/tasks', [StatController::class, 'getSecretaryTasksStat']);
+
+    Route::get('stream/{mediaId}', [VideoStreamController::class, 'stream']);
 });
