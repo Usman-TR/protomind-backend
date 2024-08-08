@@ -70,6 +70,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  *         description="Дата и время последнего обновления протокола"
  *     )
  * )
+ *
  */
 
 class Protocol extends Model implements HasMedia

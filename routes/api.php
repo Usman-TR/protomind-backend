@@ -44,8 +44,8 @@ Route::controller(AuthController::class)->group(function () {
 Route::group(["middleware" => "auth:api"], function() {
     Route::apiResource('users', UserController::class)->except('destroy');
 
-
     Route::get('protocols/tasks', [ProtocolTaskController::class, 'index']);
+    Route::post('/protocols/{id}/upload-chunks', [ProtocolController::class, 'uploadChunks']);
     Route::post('protocols/{id}/tasks', [ProtocolTaskController::class, 'store']);
     Route::put('protocols/tasks/{id}', [ProtocolTaskController::class, 'update']);
     Route::delete('protocols/tasks/{id}', [ProtocolTaskController::class, 'destroy']);

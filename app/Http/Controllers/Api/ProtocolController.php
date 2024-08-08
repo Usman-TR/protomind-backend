@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Protocol\FinalRequest;
 use App\Http\Requests\Protocol\StoreRequest;
 use App\Http\Requests\Protocol\UpdateRequest;
+use App\Http\Requests\Protocol\UploadChunkRequest;
 use App\Http\Resources\ProtocolResource;
 use App\Models\Protocol;
 use App\Services\ProtocolService;
@@ -394,5 +395,99 @@ class ProtocolController extends Controller
         $this->service->processTranscript($protocol);
 
         return  ResponseService::success();
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/protocols/{id}/upload-chunks",
+     *     summary="Загрузить чанк видео для протокола",
+     *     description="Загружает часть видеофайла (чанк) для указанного протокола.",
+     *     operationId="uploadVideoChunk",
+     *     tags={"Protocols"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Идентификатор протокола",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="video",
+     *                     type="file",
+     *                     description="Чанк видеофайла"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="total_chunks",
+     *                     type="integer",
+     *                     description="Общее количество чанков"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="chunk_index",
+     *                     type="integer",
+     *                     description="Индекс текущего чанка (начиная с 0)"
+     *                 ),
+     *                 required={"video", "total_chunks", "chunk_index"}
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Успешная загрузка чанка",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 @OA\Property(property="message", type="string", example="Чанк успешно загружен"),
+     *                 @OA\Property(property="chunk_index", type="integer", example=0),
+     *                 @OA\Property(property="total_chunks", type="integer", example=10)
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Протокол не найден",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Протокол не найден.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Ошибка валидации",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(
+     *                 property="errors",
+     *                 type="object",
+     *                 @OA\Property(property="video", type="array", @OA\Items(type="string")),
+     *                 @OA\Property(property="total_chunks", type="array", @OA\Items(type="string")),
+     *                 @OA\Property(property="chunk_index", type="array", @OA\Items(type="string"))
+     *             )
+     *         )
+     *     ),
+     *     security={{"bearerAuth": {}}}
+     * )
+     */
+    public function uploadChunks(string $id, UploadChunkRequest $request): JsonResponse
+    {
+        $protocol = Protocol::find($id);
+
+        if(!$protocol) {
+            return ResponseService::notFound(message: 'Протокол не найден.');
+        }
+
+        $validated = $request->validated();
+
+        $result = $this->service->handleChunk($protocol, $validated);
+
+        return ResponseService::success($result);
     }
 }

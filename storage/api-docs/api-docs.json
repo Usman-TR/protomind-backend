@@ -1057,6 +1057,155 @@
                 ]
             }
         },
+        "/api/protocols/{id}/upload-chunks": {
+            "post": {
+                "tags": [
+                    "Protocols"
+                ],
+                "summary": "Загрузить чанк видео для протокола",
+                "description": "Загружает часть видеофайла (чанк) для указанного протокола.",
+                "operationId": "uploadVideoChunk",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Идентификатор протокола",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "video",
+                                    "total_chunks",
+                                    "chunk_index"
+                                ],
+                                "properties": {
+                                    "video": {
+                                        "description": "Чанк видеофайла",
+                                        "type": "file"
+                                    },
+                                    "total_chunks": {
+                                        "description": "Общее количество чанков",
+                                        "type": "integer"
+                                    },
+                                    "chunk_index": {
+                                        "description": "Индекс текущего чанка (начиная с 0)",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Успешная загрузка чанка",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Чанк успешно загружен"
+                                                },
+                                                "chunk_index": {
+                                                    "type": "integer",
+                                                    "example": 0
+                                                },
+                                                "total_chunks": {
+                                                    "type": "integer",
+                                                    "example": 10
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Протокол не найден",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Протокол не найден."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Ошибка валидации",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "video": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "total_chunks": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "chunk_index": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/protocols/{id}/documents/pdf": {
             "get": {
                 "tags": [
@@ -2451,8 +2600,8 @@
                         "type": "string",
                         "nullable": true
                     },
-                    "execute": {
-                        "description": "Выполнить",
+                    "status": {
+                        "description": "статус",
                         "type": "boolean",
                         "nullable": true
                     }
@@ -3046,5 +3195,47 @@
                 "type": "object"
             }
         }
-    }
+    },
+    "tags": [
+        {
+            "name": "Auth",
+            "description": "Auth"
+        },
+        {
+            "name": "ChangePassword",
+            "description": "ChangePassword"
+        },
+        {
+            "name": "Keywords",
+            "description": "Keywords"
+        },
+        {
+            "name": "Meetings",
+            "description": "Meetings"
+        },
+        {
+            "name": "Protocols",
+            "description": "Protocols"
+        },
+        {
+            "name": "ProtocolDocuments",
+            "description": "ProtocolDocuments"
+        },
+        {
+            "name": "ProtocolMembers",
+            "description": "ProtocolMembers"
+        },
+        {
+            "name": "ProtocolTasks",
+            "description": "ProtocolTasks"
+        },
+        {
+            "name": "Stats",
+            "description": "Stats"
+        },
+        {
+            "name": "Users",
+            "description": "Users"
+        }
+    ]
 }

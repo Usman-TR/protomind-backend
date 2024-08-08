@@ -72,7 +72,6 @@ class StoreRequest extends FormRequest
             'secretary_id' => ['required', 'integer'],
             'director_id' => ['required', 'integer'],
             'event_date' => ['required', 'date_format:Y-m-d'],
-            'video' => ['required', 'file', 'mimes:mp4,avi,mov,wmv,mkv,flv,m4v,webm,ogg'],
         ];
     }
 }
