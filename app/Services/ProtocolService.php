@@ -239,7 +239,7 @@ class ProtocolService
             }
         }
 
-        $protocol->update(['status' => ProtocolStatusEnum::PROCESS->value]);
+        $protocol->update(['stage' => ProtocolStageEnum::VIDEO_UPLOADED->value]);
 
         // Удаляем директорию с чанками
         Storage::deleteDirectory($this->getChunkPath($protocol));

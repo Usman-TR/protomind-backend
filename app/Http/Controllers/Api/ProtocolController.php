@@ -392,6 +392,7 @@ class ProtocolController extends Controller
             return ResponseService::notFound(message: 'Протокол не найден.');
         }
 
+        $protocol->update(['stage' => ProtocolStageEnum::VIDEO_PROCESS->value]);
         $this->service->processTranscript($protocol);
 
         return  ResponseService::success();
