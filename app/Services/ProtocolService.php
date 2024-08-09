@@ -21,7 +21,7 @@ class ProtocolService
      */
     public function create(array $data): Protocol
     {
-        $data['status'] = ProtocolStatusEnum::PROCESS->value;
+        $data['status'] = ProtocolStatusEnum::NO_VIDEO->value;
         $data['creator_id'] = auth()->id();
 
         return Protocol::create($data);
@@ -222,8 +222,6 @@ class ProtocolService
 
                 // Удаляем обработанный чанк
                 unlink($chunkPath);
-            } else {
-                \Log::warning("Protocol:{$protocol->id}. Chunk file not found: {$chunkPath}");
             }
         }
 
@@ -237,14 +235,9 @@ class ProtocolService
             } catch (FileDoesNotExist|FileIsTooBig $e) {
                 \Log::error("Protocol:{$protocol->id}. Error attaching media: {$e->getMessage()}");
             }
-        } else {
-            \Log::error("Protocol:{$protocol->id}. Failed to compile video: Output file is empty.");
         }
 
-        // Удаляем временный файл после добавления медиа
-        if (file_exists($tempOutputPath)) {
-            unlink($tempOutputPath);
-        }
+        $protocol->update(['status' => ProtocolStatusEnum::PROCESS->value]);
 
         // Удаляем директорию с чанками
         Storage::deleteDirectory($this->getChunkPath($protocol));
