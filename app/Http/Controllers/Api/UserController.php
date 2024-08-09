@@ -163,7 +163,7 @@ class UserController extends Controller
      */
     public function update(UpdateRequest $request, string $id): JsonResponse
     {
-        $user = User::find($id);
+        $user = User::withTrashed()->find($id);
 
         if(!$user) {
             return ResponseService::badRequest(message: "Пользователь не найден.");
