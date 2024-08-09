@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\ProtocolStageEnum;
 use App\Enums\ProtocolStatusEnum;
 use App\Jobs\ProcessVideoJob;
 use App\Models\Keyword;
@@ -21,7 +22,8 @@ class ProtocolService
      */
     public function create(array $data): Protocol
     {
-        $data['status'] = ProtocolStatusEnum::NO_VIDEO->value;
+        $data['status'] = ProtocolStatusEnum::PROCESS->value;
+        $data['stage'] = ProtocolStageEnum::NO_VIDEO->value;
         $data['creator_id'] = auth()->id();
 
         return Protocol::create($data);
